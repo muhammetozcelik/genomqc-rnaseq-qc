@@ -3,6 +3,7 @@
 [![CI](https://github.com/muhammetozcelik/genomqc-rnaseq-qc/actions/workflows/ci.yml/badge.svg)](https://github.com/muhammetozcelik/genomqc-rnaseq-qc/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/badge/release-v0.1.0-2f855a.svg)](CHANGELOG.md)
+[**View the live example MultiQC report →**](https://muhammetozcelik.github.io/genomqc-rnaseq-qc/demo/)
 
 GenomQC is a reproducible quality-control and preprocessing workflow for
 paired-end RNA-seq FASTQ files. It validates read pairing, records input
