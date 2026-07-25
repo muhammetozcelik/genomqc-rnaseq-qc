@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reproducible quality control and preprocessing for paired-end RNA-seq FASTQ files.">
+  <meta name="theme-color" content="#082c27">
+  <title>GenomQC — Reproducible RNA-seq Quality Control</title>
+  <style>
+    :root{--ink:#10201d;--muted:#5c6c68;--paper:#f6f7f2;--white:#fff;--forest:#082c27;--mint:#58d6ad;--pale:#def7ed;--line:#d9e2de;--shadow:0 24px 70px rgba(8,44,39,.12)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--paper);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}a{color:inherit}.wrap{width:min(1140px,calc(100% - 40px));margin:auto}
+    header{position:absolute;z-index:5;inset:0 0 auto;color:#fff}.nav{min-height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff20}.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:800}.mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;color:var(--forest);background:var(--mint)}.links{display:flex;align-items:center;gap:25px}.links a{color:#ffffffcc;text-decoration:none;font-size:.92rem;font-weight:650}.links a:hover{color:#fff}.links .outline{padding:8px 14px;border:1px solid #ffffff45;border-radius:99px;color:#fff}
+    .hero{position:relative;overflow:hidden;padding:165px 0 110px;color:#fff;background:radial-gradient(circle at 83% 22%,#58d6ad33,transparent 30%),radial-gradient(circle at 12% 85%,#f0b45b19,transparent 28%),var(--forest)}.hero:after{content:"";position:absolute;inset:0;opacity:.14;background-image:linear-gradient(#ffffff12 1px,transparent 1px),linear-gradient(90deg,#ffffff12 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent)}.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.08fr .92fr;gap:70px;align-items:center}.eyebrow{display:flex;align-items:center;gap:9px;margin:0 0 21px;color:var(--mint);font-size:.8rem;font-weight:850;letter-spacing:.13em;text-transform:uppercase}.eyebrow:before{content:"";width:28px;height:2px;background:currentColor}h1{margin:0;max-width:760px;font-size:clamp(3rem,6.2vw,5.6rem);line-height:.98;letter-spacing:-.055em}.hero-copy>p{max-width:650px;margin:27px 0 0;color:#ffffffbd;font-size:clamp(1.05rem,1.8vw,1.25rem)}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:33px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 21px;border-radius:99px;text-decoration:none;font-weight:780;transition:.18s}.button:hover{transform:translateY(-2px)}.primary{color:var(--forest);background:var(--mint)}.secondary{color:#fff;border:1px solid #ffffff40;background:#ffffff0a}
+    .report{padding:24px;border:1px solid #ffffff26;border-radius:24px;background:#ffffff11;box-shadow:0 32px 90px #0004;backdrop-filter:blur(12px)}.report-top{display:flex;justify-content:space-between;margin-bottom:20px}.report-title{color:#ffffffa3;font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.status{display:flex;align-items:center;gap:8px;color:var(--mint);font-size:.8rem;font-weight:750}.status:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 5px #58d6ad20}.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.metric{padding:17px;border-radius:16px;background:#0516137a}.metric strong{display:block;font-size:1.55rem;letter-spacing:-.04em}.metric span{color:#ffffff8c;font-size:.77rem}.flow{display:flex;align-items:center;gap:6px;margin-top:19px;color:#ffffffc9;font-size:.72rem;font-weight:650}.flow i{flex:1;height:1px;background:#ffffff26}
+    section{padding:100px 0}.section-head{max-width:710px;margin-bottom:44px}.section-head .eyebrow{color:#267a64}h2{margin:0;font-size:clamp(2.1rem,4vw,3.55rem);line-height:1.08;letter-spacing:-.045em}.section-head p{margin:18px 0 0;color:var(--muted);font-size:1.05rem}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{padding:29px;border:1px solid var(--line);border-radius:22px;background:#fff}.num{display:grid;place-items:center;width:42px;height:42px;margin-bottom:28px;border-radius:12px;color:var(--forest);background:var(--pale);font-size:.85rem;font-weight:850}.card h3{margin:0 0 10px}.card p{margin:0;color:var(--muted);font-size:.94rem}
+    .evidence{background:#fff}.evidence-grid{display:grid;grid-template-columns:.88fr 1.12fr;gap:65px;align-items:center}.result{padding:34px;color:#fff;border-radius:26px;background:var(--forest);box-shadow:var(--shadow)}.result h3{margin:0 0 23px}.row{display:grid;grid-template-columns:1fr auto;gap:18px;padding:17px 0;border-top:1px solid #ffffff1f}.row span{color:#ffffffa3}.row strong{color:var(--mint)}.evidence-copy p{color:var(--muted);font-size:1.03rem}.plain{display:inline-flex;margin-top:12px;color:#146c55;font-weight:780;text-underline-offset:5px}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);counter-reset:step}.step{position:relative;padding:30px 26px 0 0}.step:before{counter-increment:step;content:"0" counter(step);display:block;margin-bottom:16px;color:#2f7d68;font-size:.78rem;font-weight:850;letter-spacing:.1em}.step:after{content:"";position:absolute;top:-5px;left:0;width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 5px var(--pale)}.step h3{margin:0 0 8px;font-size:1rem}.step p{margin:0;color:var(--muted);font-size:.9rem}
+    .contact{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;padding:58px;color:#fff;border-radius:28px;background:var(--forest);box-shadow:var(--shadow)}.contact h2{max-width:690px}.contact p{margin:14px 0 0;color:#ffffffa6}.contact .button{white-space:nowrap}footer{padding:30px 0 42px}.footer{display:flex;justify-content:space-between;gap:20px;padding-top:25px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}.footer-links{display:flex;gap:20px}
+    @media(max-width:860px){.links a:not(.outline){display:none}.hero{padding-top:135px}.hero-grid,.evidence-grid{grid-template-columns:1fr}.hero-grid{gap:48px}.cards{grid-template-columns:1fr}.steps{grid-template-columns:repeat(2,1fr);gap:32px 0}.contact{grid-template-columns:1fr;padding:40px}.contact .button{justify-self:start}}
+    @media(max-width:540px){.wrap{width:min(100% - 28px,1140px)}.hero{padding:125px 0 76px}h1{font-size:3.1rem}section{padding:76px 0}.metric strong{font-size:1.25rem}.steps{grid-template-columns:1fr}.contact{padding:32px 25px}.footer{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#top"><span class="mark">G</span>GenomQC</a>
+      <nav class="links" aria-label="Primary navigation">
+        <a href="#services">Services</a><a href="#evidence">Case study</a><a href="demo/">Live report</a>
+        <a class="outline" href="mailto:ozcelikmuhammet@outlook.com.tr?subject=RNA-seq%20QC%20inquiry">Discuss a dataset</a>
+      </nav>
+    </div>
+  </header>
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">RNA-seq quality control</div>
+          <h1>Know your reads before you trust the result.</h1>
+          <p>Reproducible quality control and conservative preprocessing for paired-end RNA-seq FASTQ files, delivered with clear reports and complete run records.</p>
+          <div class="actions">
+            <a class="button primary" href="mailto:ozcelikmuhammet@outlook.com.tr?subject=RNA-seq%20QC%20inquiry&body=Hello%20Muhammet%2C%0A%0AI%20would%20like%20to%20discuss%20an%20RNA-seq%20dataset.%0A%0ASample%20count%3A%0ARead%20type%3A%0AApproximate%20data%20size%3A%0A">Discuss your dataset</a>
+            <a class="button secondary" href="demo/">Open live MultiQC report</a>
+          </div>
+        </div>
+        <aside class="report">
+          <div class="report-top"><span class="report-title">Demonstration run</span><span class="status">Completed</span></div>
+          <div class="metrics">
+            <div class="metric"><strong>98.38%</strong><span>read pairs retained</span></div>
+            <div class="metric"><strong>+3.13</strong><span>R2 Q30 points</span></div>
+            <div class="metric"><strong>100k</strong><span>input read pairs</span></div>
+            <div class="metric"><strong>PASS</strong><span>R2 post-trim quality</span></div>
+          </div>
+          <div class="flow"><b>Validate</b><i></i><b>QC</b><i></i><b>Trim</b><i></i><b>Report</b></div>
+        </aside>
+      </div>
+    </section>
+    <section id="services">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">What you receive</div><h2>A defensible QC record, not just a folder of charts.</h2><p>Each analysis is organized for review, handoff and repeat execution.</p></div>
+        <div class="cards">
+          <article class="card"><span class="num">01</span><h3>Input integrity</h3><p>FASTQ structure and read-pair validation, input checksums and clearly recorded sample identifiers.</p></article>
+          <article class="card"><span class="num">02</span><h3>Raw and post-trim QC</h3><p>SeqKit statistics, FastQC inspection and conservative paired-end preprocessing with fastp.</p></article>
+          <article class="card"><span class="num">03</span><h3>Review-ready delivery</h3><p>A consolidated MultiQC report, software versions, parameters, output checksums and execution logs.</p></article>
+        </div>
+      </div>
+    </section>
+    <section class="evidence" id="evidence">
+      <div class="wrap evidence-grid">
+        <div class="result">
+          <h3>Public demonstration case</h3>
+          <div class="row"><span>Input</span><strong>100,000 pairs</strong></div>
+          <div class="row"><span>Pairs retained</span><strong>98,376</strong></div>
+          <div class="row"><span>R2 Q30</span><strong>82.28 → 85.41%</strong></div>
+          <div class="row"><span>R2 per-base quality</span><strong>WARN → PASS</strong></div>
+        </div>
+        <div class="evidence-copy">
+          <div class="section-head"><div class="eyebrow">Evidence over promises</div><h2>Inspect the output before starting a project.</h2></div>
+          <p>The public demonstration uses a 100,000-pair RNA-seq subset. Conservative tail trimming improved terminal read quality while preserving 98.38% of read pairs.</p>
+          <p>The repository includes the workflow, pinned environment, automated tests and a reproducibility record. The live report shows exactly how results are presented.</p>
+          <a class="plain" href="demo/">View the interactive report →</a><br>
+          <a class="plain" href="https://github.com/muhammetozcelik/genomqc-rnaseq-qc">Inspect the source and tests →</a>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">Working process</div><h2>Clear scope. Traceable execution. Useful handoff.</h2></div>
+        <div class="steps">
+          <article class="step"><h3>Dataset review</h3><p>Confirm read type, sample count, file sizes and research objective.</p></article>
+          <article class="step"><h3>QC execution</h3><p>Validate inputs, run raw QC and apply agreed preprocessing parameters.</p></article>
+          <article class="step"><h3>Technical review</h3><p>Compare before-and-after metrics and flag limitations or unusual patterns.</p></article>
+          <article class="step"><h3>Delivery</h3><p>Provide reports, manifests, checksums, logs and a concise written summary.</p></article>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="wrap contact">
+        <div><h2>Have paired-end RNA-seq data waiting for QC?</h2><p>Send the sample count, approximate data size and expected timeline for an initial scope review.</p></div>
+        <a class="button primary" href="mailto:ozcelikmuhammet@outlook.com.tr?subject=RNA-seq%20QC%20inquiry&body=Hello%20Muhammet%2C%0A%0AI%20would%20like%20to%20discuss%20an%20RNA-seq%20dataset.%0A%0ASample%20count%3A%0ARead%20type%3A%0AApproximate%20data%20size%3A%0AExpected%20timeline%3A%0A">Email Muhammet Özçelik</a>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap footer"><span>© 2026 GenomQC · Research-use workflow · No clinical interpretation</span><div class="footer-links"><a href="https://github.com/muhammetozcelik">GitHub profile</a><a href="https://github.com/muhammetozcelik/genomqc-rnaseq-qc">Repository</a></div></div></footer>
+</body>
+</html>
