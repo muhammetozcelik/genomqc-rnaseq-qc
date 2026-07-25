@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use GenomQC, please cite the software repository."
+title: "GenomQC RNA-seq QC Pipeline"
+type: software
+version: 0.1.0
+date-released: 2026-07-25
+authors:
+  - family-names: "Özçelik"
+    given-names: "Muhammet"
+repository-code: "https://github.com/muhammetozcelik/genomqc-rnaseq-qc"
+license: MIT
+keywords:
+  - RNA-seq
+  - FASTQ
+  - quality control
+  - FastQC
+  - fastp
+  - MultiQC
+

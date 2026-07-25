@@ -1,0 +1,20 @@
+# Generated workflow outputs
+results/
+test-output/
+*.fastq.gz
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environments and editors
+.venv/
+.idea/
+.vscode/
+*.swp
+
+# Operating systems
+.DS_Store
+Thumbs.db
+

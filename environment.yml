@@ -1,0 +1,13 @@
+name: genomqc
+
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  - python=3.13
+  - seqkit=2.13
+  - fastqc=0.12.1
+  - fastp=1.3.6
+  - multiqc=1.35
+

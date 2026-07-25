@@ -1,0 +1,237 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+readonly VERSION="0.1.0"
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+threads=2
+cut_mean_quality=20
+length_required=20
+skip_trimming=false
+r1=""
+r2=""
+sample=""
+output_dir=""
+
+usage() {
+    cat <<'EOF'
+Usage:
+  genomqc --r1 FILE --r2 FILE --sample NAME --output DIR [options]
+
+Required:
+  --r1 FILE             Read 1 FASTQ or FASTQ.GZ
+  --r2 FILE             Read 2 FASTQ or FASTQ.GZ
+  --sample NAME         Sample identifier used in output filenames
+  --output DIR          Output directory
+
+Options:
+  --threads INT         Worker threads (default: 2)
+  --cut-mean-quality N  fastp sliding-window mean quality (default: 20)
+  --length-required N   Minimum retained read length (default: 20)
+  --skip-trimming       Run validation and raw QC only
+  --help                Show help
+  --version             Show version
+EOF
+}
+
+die() {
+    printf 'Error: %s\n' "$*" >&2
+    exit 1
+}
+
+is_positive_integer() {
+    [[ "$1" =~ ^[1-9][0-9]*$ ]]
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --r1)
+            [[ $# -ge 2 ]] || die "--r1 requires a value"
+            r1="$2"
+            shift 2
+            ;;
+        --r2)
+            [[ $# -ge 2 ]] || die "--r2 requires a value"
+            r2="$2"
+            shift 2
+            ;;
+        --sample)
+            [[ $# -ge 2 ]] || die "--sample requires a value"
+            sample="$2"
+            shift 2
+            ;;
+        --output)
+            [[ $# -ge 2 ]] || die "--output requires a value"
+            output_dir="$2"
+            shift 2
+            ;;
+        --threads)
+            [[ $# -ge 2 ]] || die "--threads requires a value"
+            threads="$2"
+            shift 2
+            ;;
+        --cut-mean-quality)
+            [[ $# -ge 2 ]] || die "--cut-mean-quality requires a value"
+            cut_mean_quality="$2"
+            shift 2
+            ;;
+        --length-required)
+            [[ $# -ge 2 ]] || die "--length-required requires a value"
+            length_required="$2"
+            shift 2
+            ;;
+        --skip-trimming)
+            skip_trimming=true
+            shift
+            ;;
+        --help|-h)
+            usage
+            exit 0
+            ;;
+        --version)
+            printf 'GenomQC %s\n' "$VERSION"
+            exit 0
+            ;;
+        *)
+            die "unknown option: $1"
+            ;;
+    esac
+done
+
+[[ -n "$r1" ]] || die "--r1 is required"
+[[ -n "$r2" ]] || die "--r2 is required"
+[[ -n "$sample" ]] || die "--sample is required"
+[[ -n "$output_dir" ]] || die "--output is required"
+[[ -f "$r1" ]] || die "input file not found: $r1"
+[[ -f "$r2" ]] || die "input file not found: $r2"
+[[ "$sample" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]] || \
+    die "sample may contain only letters, numbers, dots, underscores and hyphens"
+is_positive_integer "$threads" || die "--threads must be a positive integer"
+is_positive_integer "$cut_mean_quality" || \
+    die "--cut-mean-quality must be a positive integer"
+is_positive_integer "$length_required" || \
+    die "--length-required must be a positive integer"
+
+required_tools=(python3 seqkit fastqc multiqc sha256sum)
+if [[ "$skip_trimming" == false ]]; then
+    required_tools+=(fastp)
+fi
+
+for tool in "${required_tools[@]}"; do
+    command -v "$tool" >/dev/null 2>&1 || die "required tool not found: $tool"
+done
+
+raw_fastqc_dir="$output_dir/raw_fastqc"
+trimmed_dir="$output_dir/trimmed"
+trimmed_fastqc_dir="$output_dir/trimmed_fastqc"
+report_dir="$output_dir/reports"
+multiqc_dir="$output_dir/multiqc"
+checksum_dir="$output_dir/checksums"
+manifest_dir="$output_dir/manifests"
+log_dir="$output_dir/logs"
+
+mkdir -p \
+    "$raw_fastqc_dir" \
+    "$trimmed_dir" \
+    "$trimmed_fastqc_dir" \
+    "$report_dir" \
+    "$multiqc_dir" \
+    "$checksum_dir" \
+    "$manifest_dir" \
+    "$log_dir"
+
+log_file="$log_dir/genomqc.log"
+exec > >(tee -a "$log_file") 2>&1
+
+on_error() {
+    local exit_code=$?
+    printf 'GenomQC failed at line %s (exit %s).\n' "${BASH_LINENO[0]}" "$exit_code"
+    exit "$exit_code"
+}
+trap on_error ERR
+
+started_at="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+printf 'GenomQC %s\n' "$VERSION"
+printf 'Started: %s\n' "$started_at"
+printf 'Sample: %s\n' "$sample"
+
+printf '[1/7] Validating FASTQ structure and read pairing...\n'
+python3 "$PROJECT_ROOT/src/validate_fastq_pairs.py" "$r1" "$r2"
+
+printf '[2/7] Recording input checksums and software versions...\n'
+sha256sum "$r1" "$r2" > "$checksum_dir/inputs.sha256"
+
+python3 "$PROJECT_ROOT/src/write_manifest.py" \
+    --output "$manifest_dir/run_manifest.json" \
+    --version "$VERSION" \
+    --started-at "$started_at" \
+    --sample "$sample" \
+    --r1 "$r1" \
+    --r2 "$r2" \
+    --threads "$threads" \
+    --cut-mean-quality "$cut_mean_quality" \
+    --length-required "$length_required" \
+    --skip-trimming "$skip_trimming"
+
+printf '[3/7] Calculating raw read statistics...\n'
+seqkit stats --all --tabular "$r1" "$r2" > "$report_dir/raw_seqkit.tsv"
+
+printf '[4/7] Running FastQC on raw reads...\n'
+fastqc \
+    --threads "$threads" \
+    --outdir "$raw_fastqc_dir" \
+    "$r1" "$r2"
+
+if [[ "$skip_trimming" == true ]]; then
+    printf '[5/7] Trimming skipped by request.\n'
+    printf '[6/7] Post-trimming QC skipped.\n'
+else
+    trimmed_r1="$trimmed_dir/${sample}_trimmed_R1.fastq.gz"
+    trimmed_r2="$trimmed_dir/${sample}_trimmed_R2.fastq.gz"
+
+    printf '[5/7] Trimming paired reads with fastp...\n'
+    fastp \
+        --in1 "$r1" \
+        --in2 "$r2" \
+        --out1 "$trimmed_r1" \
+        --out2 "$trimmed_r2" \
+        --detect_adapter_for_pe \
+        --cut_tail \
+        --cut_window_size 4 \
+        --cut_mean_quality "$cut_mean_quality" \
+        --length_required "$length_required" \
+        --thread "$threads" \
+        --html "$report_dir/fastp.html" \
+        --json "$report_dir/fastp.json"
+
+    printf '[6/7] Validating and profiling trimmed reads...\n'
+    python3 "$PROJECT_ROOT/src/validate_fastq_pairs.py" "$trimmed_r1" "$trimmed_r2"
+    sha256sum "$trimmed_r1" "$trimmed_r2" > "$checksum_dir/outputs.sha256"
+    seqkit stats --all --tabular \
+        "$trimmed_r1" "$trimmed_r2" \
+        > "$report_dir/trimmed_seqkit.tsv"
+    fastqc \
+        --threads "$threads" \
+        --outdir "$trimmed_fastqc_dir" \
+        "$trimmed_r1" "$trimmed_r2"
+fi
+
+printf '[7/7] Building consolidated MultiQC report...\n'
+multiqc \
+    "$raw_fastqc_dir" \
+    "$trimmed_fastqc_dir" \
+    "$report_dir" \
+    --outdir "$multiqc_dir" \
+    --filename genomqc_multiqc.html \
+    --force
+
+completed_at="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+python3 "$PROJECT_ROOT/src/finalize_manifest.py" \
+    "$manifest_dir/run_manifest.json" \
+    "$completed_at"
+
+printf 'Completed: %s\n' "$completed_at"
+printf 'MultiQC report: %s\n' "$multiqc_dir/genomqc_multiqc.html"
+

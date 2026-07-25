@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Run Python tests
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Check shell syntax
+        run: bash -n bin/genomqc tests/test_cli.sh
+      - name: Run CLI checks
+        run: bash tests/test_cli.sh
+      - name: Validate example pairs
+        run: python src/validate_fastq_pairs.py examples/data/demo_R1.fastq examples/data/demo_R2.fastq
+
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+      - name: Run complete synthetic workflow
+        shell: micromamba-shell {0}
+        run: |
+          ./bin/genomqc \
+            --r1 examples/data/demo_R1.fastq \
+            --r2 examples/data/demo_R2.fastq \
+            --sample demo \
+            --output test-output
+      - name: Assert expected artifacts
+        run: |
+          test -s test-output/multiqc/genomqc_multiqc.html
+          test -s test-output/manifests/run_manifest.json
+          test -s test-output/checksums/inputs.sha256
+          test -s test-output/checksums/outputs.sha256
+      - name: Upload example report
+        uses: actions/upload-artifact@v6
+        with:
+          name: genomqc-example-report
+          path: |
+            test-output/multiqc/genomqc_multiqc.html
+            test-output/manifests/run_manifest.json
+            test-output/reports/*.tsv
+
