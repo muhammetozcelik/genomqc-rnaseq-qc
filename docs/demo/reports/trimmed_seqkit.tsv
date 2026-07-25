@@ -1,0 +1,3 @@
+file	format	type	num_seqs	sum_len	min_len	avg_len	max_len	Q1	Q2	Q3	sum_gap	N50	N50_num	Q20(%)	Q30(%)	AvgQual	GC(%)	sum_n
+test-output/trimmed/demo_trimmed_R1.fastq.gz	FASTQ	DNA	3	72	24	24.0	24	24	24	24	0	24	1	100	100	40.00	50.00	0
+test-output/trimmed/demo_trimmed_R2.fastq.gz	FASTQ	DNA	3	72	24	24.0	24	24	24	24	0	24	1	100	86	28.31	50.00	0

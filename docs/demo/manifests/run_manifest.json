@@ -1,0 +1,26 @@
+{
+  "pipeline": {
+    "name": "GenomQC",
+    "version": "0.1.0"
+  },
+  "sample": "demo",
+  "started_at_utc": "2026-07-25T00:08:50Z",
+  "completed_at_utc": "2026-07-25T00:08:58Z",
+  "inputs": {
+    "r1": "/home/runner/work/genomqc-rnaseq-qc/genomqc-rnaseq-qc/examples/data/demo_R1.fastq",
+    "r2": "/home/runner/work/genomqc-rnaseq-qc/genomqc-rnaseq-qc/examples/data/demo_R2.fastq"
+  },
+  "parameters": {
+    "threads": 2,
+    "cut_mean_quality": 20,
+    "length_required": 20,
+    "skip_trimming": false
+  },
+  "software": {
+    "python": "3.13.14",
+    "seqkit": "seqkit v2.13.0",
+    "fastqc": "FastQC v0.12.1",
+    "fastp": "fastp 1.3.6",
+    "multiqc": "multiqc, version 1.35"
+  }
+}
