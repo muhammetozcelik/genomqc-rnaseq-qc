@@ -3,7 +3,8 @@
 [![CI](https://github.com/muhammetozcelik/genomqc-rnaseq-qc/actions/workflows/ci.yml/badge.svg)](https://github.com/muhammetozcelik/genomqc-rnaseq-qc/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/badge/release-v0.1.0-2f855a.svg)](CHANGELOG.md)
-[**View the live example MultiQC report →**](https://muhammetozcelik.github.io/genomqc-rnaseq-qc/demo/)
+[**Open the GenomQC Decision Report →**](https://muhammetozcelik.github.io/genomqc-rnaseq-qc/)
+· [View the example MultiQC report](https://muhammetozcelik.github.io/genomqc-rnaseq-qc/demo/)
 
 GenomQC is a reproducible quality-control and preprocessing workflow for
 paired-end RNA-seq FASTQ files. It validates read pairing, records input
@@ -12,6 +13,13 @@ a consolidated MultiQC report.
 
 > Research-use workflow. GenomQC does not perform clinical interpretation or
 > diagnostic reporting.
+
+## Browser decision report
+
+The public beta turns MultiQC JSON, TSV or CSV exports into an explainable
+sample-level PASS / WARN / FAIL report. Processing is performed locally in the
+browser: the selected file is not uploaded to a GenomQC server. Reports can be
+downloaded as JSON or printed to PDF.
 
 ## What it produces
 
