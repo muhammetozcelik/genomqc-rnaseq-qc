@@ -18,6 +18,21 @@
     retained: [/retained/, /passed.?filter.?percent/, /surviving.?percent/, /reads.?after.?filter.?percent/]
   };
 
+  const defaultThresholds = Object.freeze({
+    q30WarnMin: 85,
+    q30FailMin: 80,
+    retainedWarnMin: 85,
+    retainedFailMin: 70,
+    duplicationWarnMax: 50,
+    duplicationFailMax: 70,
+    adapterWarnMax: 5,
+    adapterFailMax: 15,
+    readsWarnMin: 5000000,
+    readsFailMin: 1000000,
+    gcDeviationWarnMax: 8,
+    gcDeviationFailMax: 15
+  });
+
   function normalizedKey(value) {
     return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "_");
   }
@@ -183,7 +198,16 @@
     return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
   }
 
-  function evaluateSamples(samples) {
+  function resolveThresholds(overrides) {
+    const source = overrides && typeof overrides === "object" ? overrides : {};
+    return Object.fromEntries(Object.entries(defaultThresholds).map(([key, fallback]) => {
+      const value = Number(source[key]);
+      return [key, Number.isFinite(value) ? value : fallback];
+    }));
+  }
+
+  function evaluateSamples(samples, thresholdOverrides) {
+    const thresholds = resolveThresholds(thresholdOverrides);
     const gcValues = samples.map((sample) => sample.gc).filter((value) => value !== undefined);
     const gcMedian = gcValues.length >= 3 ? median(gcValues) : undefined;
 
@@ -200,29 +224,29 @@
       };
 
       if (sample.q30 !== undefined) {
-        if (sample.q30 < 80) flag(2, `Q30 düşük (%${sample.q30.toFixed(1)})`, "Ham veriyi ve kalite profillerini kontrol edin; yeniden kırpma veya yeniden dizileme değerlendirin.");
-        else if (sample.q30 < 85) flag(1, `Q30 sınırda (%${sample.q30.toFixed(1)})`, "Per-base kalite grafiğini ve düşük kaliteli uçları inceleyin.");
+        if (sample.q30 < thresholds.q30FailMin) flag(2, `Q30 düşük (%${sample.q30.toFixed(1)})`, "Ham veriyi ve kalite profillerini kontrol edin; yeniden kırpma veya yeniden dizileme değerlendirin.");
+        else if (sample.q30 < thresholds.q30WarnMin) flag(1, `Q30 sınırda (%${sample.q30.toFixed(1)})`, "Per-base kalite grafiğini ve düşük kaliteli uçları inceleyin.");
       }
       if (sample.retained !== undefined) {
-        if (sample.retained < 70) flag(2, `Okuma tutulumu kritik (%${sample.retained.toFixed(1)})`, "Filtreleme kaybının nedenini inceleyin; adaptör ve kalite eşiklerini doğrulayın.");
-        else if (sample.retained < 85) flag(1, `Okuma tutulumu düşük (%${sample.retained.toFixed(1)})`, "Filtre öncesi ve sonrası okuma kaybını karşılaştırın.");
+        if (sample.retained < thresholds.retainedFailMin) flag(2, `Okuma tutulumu kritik (%${sample.retained.toFixed(1)})`, "Filtreleme kaybının nedenini inceleyin; adaptör ve kalite eşiklerini doğrulayın.");
+        else if (sample.retained < thresholds.retainedWarnMin) flag(1, `Okuma tutulumu düşük (%${sample.retained.toFixed(1)})`, "Filtre öncesi ve sonrası okuma kaybını karşılaştırın.");
       }
       if (sample.duplication !== undefined) {
-        if (sample.duplication > 70) flag(2, `Duplikasyon yüksek (%${sample.duplication.toFixed(1)})`, "Kütüphane karmaşıklığını ve PCR çoğaltımını değerlendirin.");
-        else if (sample.duplication > 50) flag(1, `Duplikasyon artmış (%${sample.duplication.toFixed(1)})`, "Duplikasyon kaynağını biyolojik tekrarlarla birlikte inceleyin.");
+        if (sample.duplication > thresholds.duplicationFailMax) flag(2, `Duplikasyon yüksek (%${sample.duplication.toFixed(1)})`, "Kütüphane karmaşıklığını ve PCR çoğaltımını değerlendirin.");
+        else if (sample.duplication > thresholds.duplicationWarnMax) flag(1, `Duplikasyon artmış (%${sample.duplication.toFixed(1)})`, "Duplikasyon kaynağını biyolojik tekrarlarla birlikte inceleyin.");
       }
       if (sample.adapter !== undefined) {
-        if (sample.adapter > 15) flag(2, `Adaptör içeriği yüksek (%${sample.adapter.toFixed(1)})`, "Adaptör tanımını doğrulayın ve trimming adımını tekrar çalıştırın.");
-        else if (sample.adapter > 5) flag(1, `Adaptör kalıntısı var (%${sample.adapter.toFixed(1)})`, "Adaptör profiline ve trimming raporuna bakın.");
+        if (sample.adapter > thresholds.adapterFailMax) flag(2, `Adaptör içeriği yüksek (%${sample.adapter.toFixed(1)})`, "Adaptör tanımını doğrulayın ve trimming adımını tekrar çalıştırın.");
+        else if (sample.adapter > thresholds.adapterWarnMax) flag(1, `Adaptör kalıntısı var (%${sample.adapter.toFixed(1)})`, "Adaptör profiline ve trimming raporuna bakın.");
       }
       if (sample.reads !== undefined) {
-        if (sample.reads < 1000000) flag(2, "Okuma derinliği çok düşük", "Çalışmanın güç gereksinimine göre yeniden dizileme ihtiyacını değerlendirin.");
-        else if (sample.reads < 5000000) flag(1, "Okuma derinliği düşük", "Aşağı akış analizinin minimum derinlik gereksinimini doğrulayın.");
+        if (sample.reads < thresholds.readsFailMin) flag(2, "Okuma derinliği çok düşük", "Çalışmanın güç gereksinimine göre yeniden dizileme ihtiyacını değerlendirin.");
+        else if (sample.reads < thresholds.readsWarnMin) flag(1, "Okuma derinliği düşük", "Aşağı akış analizinin minimum derinlik gereksinimini doğrulayın.");
       }
       if (sample.gc !== undefined && gcMedian !== undefined) {
         const deviation = Math.abs(sample.gc - gcMedian);
-        if (deviation > 15) flag(2, `GC oranı kohorttan ${deviation.toFixed(1)} puan sapıyor`, "Kontaminasyon, örnek karışması ve beklenen organizma GC profilini kontrol edin.");
-        else if (deviation > 8) flag(1, `GC oranı kohorttan ${deviation.toFixed(1)} puan sapıyor`, "GC dağılımını diğer numunelerle karşılaştırın.");
+        if (deviation > thresholds.gcDeviationFailMax) flag(2, `GC oranı kohorttan ${deviation.toFixed(1)} puan sapıyor`, "Kontaminasyon, örnek karışması ve beklenen organizma GC profilini kontrol edin.");
+        else if (deviation > thresholds.gcDeviationWarnMax) flag(1, `GC oranı kohorttan ${deviation.toFixed(1)} puan sapıyor`, "GC dağılımını diğer numunelerle karşılaştırın.");
       }
 
       const available = [sample.reads, sample.q30, sample.gc, sample.duplication, sample.adapter, sample.retained].filter((value) => value !== undefined).length;
@@ -252,7 +276,7 @@
     return { counts, overall, actions, risks };
   }
 
-  const api = { version: "1.0.0-beta", demoSamples, parseQcFile, evaluateSamples, summarize };
+  const api = { version: "1.1.0-beta", demoSamples, defaultThresholds, resolveThresholds, parseQcFile, evaluateSamples, summarize };
   root.GenomQCCore = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);
