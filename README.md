@@ -21,6 +21,14 @@ sample-level PASS / WARN / FAIL report. Processing is performed locally in the
 browser: the selected file is not uploaded to a GenomQC server. Reports can be
 downloaded as JSON or printed to PDF.
 
+## GenomQC Pro
+
+GenomQC Pro is a separate downloadable lab workspace for teams that need
+configurable WARN/FAIL thresholds, reusable decision profiles, lab-branded PDF
+reports, English/Turkish findings, and structured JSON/CSV exports. The public
+MIT-licensed beta remains free; the Pro product and its Founder Lab License are
+described on the [product page](https://muhammetozcelik.github.io/genomqc-rnaseq-qc/pro.html).
+
 ## What it produces
 
 - structural and pair-integrity validation for FASTQ / FASTQ.GZ inputs;
@@ -147,5 +155,7 @@ metadata in [CITATION.cff](CITATION.cff).
 
 ## License
 
-Released under the [MIT License](LICENSE).
+This public repository is released under the [MIT License](LICENSE). The
+separately distributed GenomQC Pro product uses the commercial license included
+with that download.
 

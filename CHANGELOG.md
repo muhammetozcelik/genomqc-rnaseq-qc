@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 - 2026-09-04
+
+- Added configurable decision thresholds to the browser QC engine while
+  preserving the public beta defaults.
+- Added the GenomQC Pro product page and clear free-versus-Pro positioning.
+- Added privacy, terms, and refund pages plus basic search/social metadata.
+- Added automated coverage for default and custom browser thresholds.
+
 All notable changes to GenomQC are documented here.
 
 ## [0.1.0] - 2026-07-25
