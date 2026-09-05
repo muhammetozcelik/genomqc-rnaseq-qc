@@ -1,6 +1,8 @@
 (function (root) {
   "use strict";
 
+  const copy = (english, turkish) => root.GenomQCI18n && root.GenomQCI18n.getLanguage() === "tr" ? turkish : english;
+
   const demoSamples = [
     { sample: "CTRL_01", reads: 24840000, q30: 91.7, gc: 48.2, duplication: 28.4, adapter: 1.2, retained: 96.8 },
     { sample: "CTRL_02", reads: 22190000, q30: 90.8, gc: 47.6, duplication: 31.1, adapter: 1.8, retained: 95.4 },
@@ -175,19 +177,19 @@
 
   function parseQcFile(text, fileName) {
     const trimmed = String(text || "").trim();
-    if (!trimmed) throw new Error("Dosya boş görünüyor.");
+    if (!trimmed) throw new Error(copy("The file appears to be empty.", "Dosya boş görünüyor."));
     let samples;
     if (String(fileName || "").toLowerCase().endsWith(".json") || trimmed.startsWith("{") || trimmed.startsWith("[")) {
       try {
         samples = recordsFromJson(JSON.parse(trimmed));
       } catch (error) {
-        throw new Error("JSON okunamadı. Geçerli bir MultiQC JSON dışa aktarımı yükleyin.");
+        throw new Error(copy("The JSON could not be read. Upload a valid MultiQC JSON export.", "JSON okunamadı. Geçerli bir MultiQC JSON dışa aktarımı yükleyin."));
       }
     } else {
       samples = recordsFromDelimited(trimmed);
     }
     if (!samples.length) {
-      throw new Error("Numune ve QC metrikleri bulunamadı. MultiQC JSON ya da sample, reads, q30, gc, duplication, adapter, retained sütunlu TSV/CSV kullanın.");
+      throw new Error(copy("No samples or QC metrics were found. Use MultiQC JSON or a TSV/CSV file with sample, reads, q30, gc, duplication, adapter and retained columns.", "Numune ve QC metrikleri bulunamadı. MultiQC JSON ya da sample, reads, q30, gc, duplication, adapter, retained sütunlu TSV/CSV kullanın."));
     }
     return samples.slice(0, 500);
   }
@@ -224,36 +226,36 @@
       };
 
       if (sample.q30 !== undefined) {
-        if (sample.q30 < thresholds.q30FailMin) flag(2, `Q30 düşük (%${sample.q30.toFixed(1)})`, "Ham veriyi ve kalite profillerini kontrol edin; yeniden kırpma veya yeniden dizileme değerlendirin.");
-        else if (sample.q30 < thresholds.q30WarnMin) flag(1, `Q30 sınırda (%${sample.q30.toFixed(1)})`, "Per-base kalite grafiğini ve düşük kaliteli uçları inceleyin.");
+        if (sample.q30 < thresholds.q30FailMin) flag(2, copy(`Low Q30 (${sample.q30.toFixed(1)}%)`, `Q30 düşük (%${sample.q30.toFixed(1)})`), copy("Check raw data and quality profiles; consider retrimming or resequencing.", "Ham veriyi ve kalite profillerini kontrol edin; yeniden kırpma veya yeniden dizileme değerlendirin."));
+        else if (sample.q30 < thresholds.q30WarnMin) flag(1, copy(`Borderline Q30 (${sample.q30.toFixed(1)}%)`, `Q30 sınırda (%${sample.q30.toFixed(1)})`), copy("Review the per-base quality plot and low-quality ends.", "Per-base kalite grafiğini ve düşük kaliteli uçları inceleyin."));
       }
       if (sample.retained !== undefined) {
-        if (sample.retained < thresholds.retainedFailMin) flag(2, `Okuma tutulumu kritik (%${sample.retained.toFixed(1)})`, "Filtreleme kaybının nedenini inceleyin; adaptör ve kalite eşiklerini doğrulayın.");
-        else if (sample.retained < thresholds.retainedWarnMin) flag(1, `Okuma tutulumu düşük (%${sample.retained.toFixed(1)})`, "Filtre öncesi ve sonrası okuma kaybını karşılaştırın.");
+        if (sample.retained < thresholds.retainedFailMin) flag(2, copy(`Critical read retention (${sample.retained.toFixed(1)}%)`, `Okuma tutulumu kritik (%${sample.retained.toFixed(1)})`), copy("Investigate filtering loss; verify adapter and quality thresholds.", "Filtreleme kaybının nedenini inceleyin; adaptör ve kalite eşiklerini doğrulayın."));
+        else if (sample.retained < thresholds.retainedWarnMin) flag(1, copy(`Low read retention (${sample.retained.toFixed(1)}%)`, `Okuma tutulumu düşük (%${sample.retained.toFixed(1)})`), copy("Compare read loss before and after filtering.", "Filtre öncesi ve sonrası okuma kaybını karşılaştırın."));
       }
       if (sample.duplication !== undefined) {
-        if (sample.duplication > thresholds.duplicationFailMax) flag(2, `Duplikasyon yüksek (%${sample.duplication.toFixed(1)})`, "Kütüphane karmaşıklığını ve PCR çoğaltımını değerlendirin.");
-        else if (sample.duplication > thresholds.duplicationWarnMax) flag(1, `Duplikasyon artmış (%${sample.duplication.toFixed(1)})`, "Duplikasyon kaynağını biyolojik tekrarlarla birlikte inceleyin.");
+        if (sample.duplication > thresholds.duplicationFailMax) flag(2, copy(`High duplication (${sample.duplication.toFixed(1)}%)`, `Duplikasyon yüksek (%${sample.duplication.toFixed(1)})`), copy("Assess library complexity and PCR amplification.", "Kütüphane karmaşıklığını ve PCR çoğaltımını değerlendirin."));
+        else if (sample.duplication > thresholds.duplicationWarnMax) flag(1, copy(`Elevated duplication (${sample.duplication.toFixed(1)}%)`, `Duplikasyon artmış (%${sample.duplication.toFixed(1)})`), copy("Review the source of duplication alongside biological replicates.", "Duplikasyon kaynağını biyolojik tekrarlarla birlikte inceleyin."));
       }
       if (sample.adapter !== undefined) {
-        if (sample.adapter > thresholds.adapterFailMax) flag(2, `Adaptör içeriği yüksek (%${sample.adapter.toFixed(1)})`, "Adaptör tanımını doğrulayın ve trimming adımını tekrar çalıştırın.");
-        else if (sample.adapter > thresholds.adapterWarnMax) flag(1, `Adaptör kalıntısı var (%${sample.adapter.toFixed(1)})`, "Adaptör profiline ve trimming raporuna bakın.");
+        if (sample.adapter > thresholds.adapterFailMax) flag(2, copy(`High adapter content (${sample.adapter.toFixed(1)}%)`, `Adaptör içeriği yüksek (%${sample.adapter.toFixed(1)})`), copy("Verify the adapter definition and rerun trimming.", "Adaptör tanımını doğrulayın ve trimming adımını tekrar çalıştırın."));
+        else if (sample.adapter > thresholds.adapterWarnMax) flag(1, copy(`Residual adapter content (${sample.adapter.toFixed(1)}%)`, `Adaptör kalıntısı var (%${sample.adapter.toFixed(1)})`), copy("Review the adapter profile and trimming report.", "Adaptör profiline ve trimming raporuna bakın."));
       }
       if (sample.reads !== undefined) {
-        if (sample.reads < thresholds.readsFailMin) flag(2, "Okuma derinliği çok düşük", "Çalışmanın güç gereksinimine göre yeniden dizileme ihtiyacını değerlendirin.");
-        else if (sample.reads < thresholds.readsWarnMin) flag(1, "Okuma derinliği düşük", "Aşağı akış analizinin minimum derinlik gereksinimini doğrulayın.");
+        if (sample.reads < thresholds.readsFailMin) flag(2, copy("Very low read depth", "Okuma derinliği çok düşük"), copy("Assess the need for resequencing against the study's power requirements.", "Çalışmanın güç gereksinimine göre yeniden dizileme ihtiyacını değerlendirin."));
+        else if (sample.reads < thresholds.readsWarnMin) flag(1, copy("Low read depth", "Okuma derinliği düşük"), copy("Confirm the minimum depth requirement for downstream analysis.", "Aşağı akış analizinin minimum derinlik gereksinimini doğrulayın."));
       }
       if (sample.gc !== undefined && gcMedian !== undefined) {
         const deviation = Math.abs(sample.gc - gcMedian);
-        if (deviation > thresholds.gcDeviationFailMax) flag(2, `GC oranı kohorttan ${deviation.toFixed(1)} puan sapıyor`, "Kontaminasyon, örnek karışması ve beklenen organizma GC profilini kontrol edin.");
-        else if (deviation > thresholds.gcDeviationWarnMax) flag(1, `GC oranı kohorttan ${deviation.toFixed(1)} puan sapıyor`, "GC dağılımını diğer numunelerle karşılaştırın.");
+        if (deviation > thresholds.gcDeviationFailMax) flag(2, copy(`GC rate deviates from the cohort by ${deviation.toFixed(1)} points`, `GC oranı kohorttan ${deviation.toFixed(1)} puan sapıyor`), copy("Check for contamination, sample mix-up and the expected organism GC profile.", "Kontaminasyon, örnek karışması ve beklenen organizma GC profilini kontrol edin."));
+        else if (deviation > thresholds.gcDeviationWarnMax) flag(1, copy(`GC rate deviates from the cohort by ${deviation.toFixed(1)} points`, `GC oranı kohorttan ${deviation.toFixed(1)} puan sapıyor`), copy("Compare the GC distribution with the other samples.", "GC dağılımını diğer numunelerle karşılaştırın."));
       }
 
       const available = [sample.reads, sample.q30, sample.gc, sample.duplication, sample.adapter, sample.retained].filter((value) => value !== undefined).length;
-      if (available < 2) flag(1, "Karar için metrik sayısı sınırlı", "Daha kapsamlı bir MultiQC general stats dışa aktarımı kullanın.");
+      if (available < 2) flag(1, copy("Limited metrics available for a decision", "Karar için metrik sayısı sınırlı"), copy("Use a more complete MultiQC general-stats export.", "Daha kapsamlı bir MultiQC general stats dışa aktarımı kullanın."));
       if (!findings.length) {
-        findings.push("Tanımlı eşiklerde belirgin QC riski görülmedi.");
-        actions.push("Aşağı akış analizine geçmeden önce deney tasarımı ve biyolojik kontrollerle birlikte doğrulayın.");
+        findings.push(copy("No notable QC risk was detected at the defined thresholds.", "Tanımlı eşiklerde belirgin QC riski görülmedi."));
+        actions.push(copy("Validate against the experimental design and biological controls before downstream analysis.", "Aşağı akış analizine geçmeden önce deney tasarımı ve biyolojik kontrollerle birlikte doğrulayın."));
       }
 
       return Object.assign({}, sample, {

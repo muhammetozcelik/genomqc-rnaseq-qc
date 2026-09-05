@@ -2,6 +2,8 @@
   "use strict";
 
   const core = window.GenomQCCore;
+  const language = () => (window.GenomQCI18n && window.GenomQCI18n.getLanguage() === "tr" ? "tr" : "en");
+  const copy = (english, turkish) => language() === "tr" ? turkish : english;
   const elements = {
     fileInput: document.getElementById("qc-file"),
     chooseFile: document.getElementById("choose-file"),
@@ -19,6 +21,7 @@
   };
 
   let currentReport = null;
+  let currentInput = null;
 
   function createElement(tag, className, text) {
     const element = document.createElement(tag);
@@ -34,11 +37,12 @@
   function formatNumber(value) {
     if (value === undefined) return "—";
     if (value >= 1000000) return `${(value / 1000000).toFixed(value >= 10000000 ? 1 : 2)}M`;
-    return new Intl.NumberFormat("tr-TR").format(Math.round(value));
+    return new Intl.NumberFormat(language() === "tr" ? "tr-TR" : "en-US").format(Math.round(value));
   }
 
   function formatPercent(value) {
-    return value === undefined ? "—" : `%${value.toFixed(1)}`;
+    if (value === undefined) return "—";
+    return language() === "tr" ? `%${value.toFixed(1)}` : `${value.toFixed(1)}%`;
   }
 
   function statusBadge(status) {
@@ -52,6 +56,7 @@
   }
 
   function renderReport(samples, sourceName) {
+    currentInput = { samples, sourceName };
     const evaluated = core.evaluateSamples(samples);
     const summary = core.summarize(evaluated);
     currentReport = {
@@ -62,13 +67,13 @@
       samples: evaluated
     };
 
-    elements.source.textContent = `Kaynak: ${sourceName}`;
+    elements.source.textContent = `${copy("Source", "Kaynak")}: ${sourceName}`;
     elements.overall.textContent = summary.overall;
     elements.overall.className = `status-badge status-${summary.overall.toLowerCase()}`;
 
     clear(elements.metrics);
     [
-      [evaluated.length, "Toplam örnek"],
+      [evaluated.length, copy("Total samples", "Toplam örnek")],
       [summary.counts.PASS, "Pass"],
       [summary.counts.WARN, "Warn"],
       [summary.counts.FAIL, "Fail"]
@@ -78,8 +83,8 @@
       elements.metrics.appendChild(metric);
     });
 
-    renderList(elements.findings, summary.risks, "Tanımlı eşiklerde belirgin bir kohort riski saptanmadı.");
-    renderList(elements.actions, summary.actions, "Uzman incelemesiyle birlikte aşağı akış analizine geçin.");
+    renderList(elements.findings, summary.risks, copy("No notable cohort risk was detected at the defined thresholds.", "Tanımlı eşiklerde belirgin bir kohort riski saptanmadı."));
+    renderList(elements.actions, summary.actions, copy("Proceed to downstream analysis together with qualified review.", "Uzman incelemesiyle birlikte aşağı akış analizine geçin."));
 
     clear(elements.table);
     evaluated.forEach((sample) => {
@@ -113,7 +118,7 @@
 
   function analyzeText(text, fileName) {
     const samples = core.parseQcFile(text, fileName);
-    renderReport(samples, fileName || "İçe aktarılan veri");
+    renderReport(samples, fileName || copy("Imported data", "İçe aktarılan veri"));
     return currentReport;
   }
 
@@ -121,7 +126,7 @@
     hideError();
     if (!file) return;
     if (file.size > 10 * 1024 * 1024) {
-      showError("Dosya 10 MB sınırını aşıyor. MultiQC general stats dışa aktarımını kullanın.");
+      showError(copy("The file exceeds the 10 MB limit. Use a MultiQC general-stats export.", "Dosya 10 MB sınırını aşıyor. MultiQC general stats dışa aktarımını kullanın."));
       return;
     }
     try {
@@ -129,7 +134,7 @@
       analyzeText(text, file.name);
       document.getElementById("report").scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
-      showError(error instanceof Error ? error.message : "Dosya analiz edilemedi.");
+      showError(error instanceof Error ? error.message : copy("The file could not be analyzed.", "Dosya analiz edilemedi."));
     }
   }
 
@@ -150,7 +155,7 @@
   elements.fileInput.addEventListener("change", (event) => handleFile(event.target.files && event.target.files[0]));
   elements.loadDemo.addEventListener("click", () => {
     hideError();
-    renderReport(core.demoSamples, "GenomQC demo kohortu");
+    renderReport(core.demoSamples, copy("GenomQC demo cohort", "GenomQC demo kohortu"));
     document.getElementById("report").scrollIntoView({ behavior: "smooth", block: "start" });
   });
   elements.download.addEventListener("click", downloadReport);
@@ -170,7 +175,12 @@
   });
   elements.dropZone.addEventListener("drop", (event) => handleFile(event.dataTransfer && event.dataTransfer.files[0]));
 
-  renderReport(core.demoSamples, "GenomQC demo kohortu");
+  renderReport(core.demoSamples, copy("GenomQC demo cohort", "GenomQC demo kohortu"));
+  window.addEventListener("genomqc:languagechange", () => {
+    if (!currentInput) return;
+    const demo = currentInput.sourceName === "GenomQC demo cohort" || currentInput.sourceName === "GenomQC demo kohortu";
+    renderReport(currentInput.samples, demo ? copy("GenomQC demo cohort", "GenomQC demo kohortu") : currentInput.sourceName);
+  });
   window.GenomQCApp = { analyzeText };
 
   function registerWebMcp() {
@@ -202,7 +212,7 @@
           throw new Error("fileName must be a string when provided");
         }
         hideError();
-        const report = analyzeText(input.content, input.fileName || "AI ile içe aktarılan veri");
+        const report = analyzeText(input.content, input.fileName || copy("AI-imported data", "AI ile içe aktarılan veri"));
         document.getElementById("report").scrollIntoView({ behavior: "smooth", block: "start" });
         return {
           overall: report.summary.overall,
