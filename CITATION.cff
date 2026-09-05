@@ -5,8 +5,7 @@ type: software
 version: 0.1.0
 date-released: 2026-07-25
 authors:
-  - family-names: "Özçelik"
-    given-names: "Muhammet"
+  - name: "GenomQC"
 repository-code: "https://github.com/muhammetozcelik/genomqc-rnaseq-qc"
 license: MIT
 keywords:

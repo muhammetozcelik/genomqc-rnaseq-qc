@@ -7,7 +7,7 @@ GenomQC processes local FASTQ files and does not upload sequence data.
 - Review generated logs and manifests before sharing them externally because
   they contain local input paths.
 - Report suspected vulnerabilities privately to
-  `ozcelikmuhammet@outlook.com.tr`.
+  `genomqc@outlook.com`.
 
 This research-use workflow is not validated for clinical diagnosis.
 
