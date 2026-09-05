@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="A practical guide to turning MultiQC RNA-seq exports into transparent sample-level PASS, WARN and FAIL decisions without uploading QC files." />
+    <meta name="theme-color" content="#081823" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="From MultiQC output to defensible RNA-seq QC decisions" />
+    <meta property="og:description" content="A transparent workflow for sample-level RNA-seq QC decisions, review reasons and reproducible reports." />
+    <meta property="og:url" content="https://muhammetozcelik.github.io/genomqc-rnaseq-qc/multiqc-rnaseq-qc-decisions.html" />
+    <title>MultiQC RNA-seq QC decisions: a practical guide | GenomQC</title>
+    <link rel="canonical" href="https://muhammetozcelik.github.io/genomqc-rnaseq-qc/multiqc-rnaseq-qc-decisions.html" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./assets/legal.css" />
+  </head>
+  <body>
+    <header><a href="./">GQ · GenomQC</a><span>A LYOVEXA BRAND</span></header>
+    <main>
+      <p class="kicker">PRACTICAL RNA-SEQ QC GUIDE</p>
+      <h1>From MultiQC output to a defensible decision</h1>
+      <p class="updated">A transparent, sample-level workflow for research teams</p>
+
+      <p class="notice">MultiQC is excellent at aggregating quality-control results. The next challenge is deciding which samples need review, recording why, and making the decision reproducible.</p>
+
+      <h2>1. Start with a structured export</h2>
+      <p>Use a MultiQC JSON, TSV or CSV export that contains recognizable sample identifiers and the metrics relevant to your protocol. Keep the original MultiQC report alongside the structured export so every decision can be traced back to its source.</p>
+
+      <h2>2. Make missing data visible</h2>
+      <p>A missing metric is not a passing result. Record which values were available, which aliases were mapped, and which samples require manual review because a required field was absent.</p>
+
+      <h2>3. Use thresholds that match the experiment</h2>
+      <p>Read depth, Q30, retention, duplication, adapter content and GC deviation can all inform QC, but no single boundary is universal. Choose WARN and FAIL thresholds with reference to the assay, organism, library preparation, sequencing platform, study design and laboratory SOP.</p>
+
+      <h2>4. Keep the reason beside the status</h2>
+      <p>PASS, WARN and FAIL labels are only useful when a reviewer can see the metric, boundary and recommended next action that produced them. Store the rule profile with the report rather than leaving the decision logic in an analyst's memory.</p>
+
+      <h2>5. Review the cohort, then archive the decision</h2>
+      <p>Inspect individual flags in the context of the full cohort. Save a human-readable report and a machine-readable export so the project can be reviewed, compared or audited later.</p>
+
+      <h2>Try the workflow</h2>
+      <p><a href="./"><strong>Open the free GenomQC browser report</strong></a> to load a supported export or the built-in demo. Processing happens in the browser; GenomQC does not operate an application server that receives the selected QC file.</p>
+      <p>Teams that need configurable thresholds, reusable profiles, bilingual findings and branded PDF reports can view <a href="./pro.html">GenomQC Pro</a> or <a href="https://www.shopier.com/lyovexa/50580150">buy the 919 TRY Founder Lab License through LyoVexa</a>.</p>
+
+      <h2>Scope</h2>
+      <p>GenomQC supports research-use prioritization. It does not provide clinical interpretation, diagnosis, treatment recommendations or patient-management decisions. Every result requires review by appropriately qualified personnel.</p>
+    </main>
+    <footer><span>© 2026 GenomQC · A LyoVexa brand</span><div><a href="./">Free beta</a><a href="./pro.html">Pro</a><a href="./privacy.html">Privacy</a><a href="mailto:genomqc@outlook.com">Support</a></div></footer>
+  </body>
+</html>

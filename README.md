@@ -5,6 +5,7 @@
 [![Release](https://img.shields.io/badge/release-v0.1.0-2f855a.svg)](CHANGELOG.md)
 [**Open the GenomQC Decision Report →**](https://muhammetozcelik.github.io/genomqc-rnaseq-qc/)
 · [View the example MultiQC report](https://muhammetozcelik.github.io/genomqc-rnaseq-qc/demo/)
+· [Read the practical RNA-seq QC decision guide](https://muhammetozcelik.github.io/genomqc-rnaseq-qc/multiqc-rnaseq-qc-decisions.html)
 
 GenomQC is a reproducible quality-control and preprocessing workflow for
 paired-end RNA-seq FASTQ files. It validates read pairing, records input
@@ -161,5 +162,4 @@ metadata in [CITATION.cff](CITATION.cff).
 This public repository is released under the [MIT License](LICENSE). The
 separately distributed GenomQC Pro product uses the commercial license included
 with that download.
-
 
