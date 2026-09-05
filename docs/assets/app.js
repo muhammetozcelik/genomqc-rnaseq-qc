@@ -74,9 +74,9 @@
     clear(elements.metrics);
     [
       [evaluated.length, copy("Total samples", "Toplam örnek")],
-      [summary.counts.PASS, "Pass"],
-      [summary.counts.WARN, "Warn"],
-      [summary.counts.FAIL, "Fail"]
+      [summary.counts.PASS, "PASS"],
+      [summary.counts.WARN, "WARN"],
+      [summary.counts.FAIL, "FAIL"]
     ].forEach(([value, label]) => {
       const metric = createElement("div", "metric");
       metric.append(createElement("strong", "", String(value)), createElement("span", "", label));

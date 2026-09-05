@@ -3,7 +3,7 @@
 
   const storageKey = "genomqc-language";
   const tr = new Map(Object.entries({
-    "Report": "Rapor", "Method": "Yöntem", "Pricing": "Fiyatlandırma", "Features": "Özellikler", "License": "Lisans", "Buy Pro": "Pro'yu Satın Al", "Support": "Destek",
+    "Report": "Rapor", "Method": "Yöntem", "Pricing": "Fiyatlandırma", "Features": "Özellikler", "License": "Lisans", "Buy Pro": "Pro'yu Satın Al", "Support": "Destek", "Language": "Dil", "Reads": "Okuma", "Adapter": "Adaptör", "LOCAL": "YEREL", "· one-time / up to 5 users": "· tek seferlik / 5 kullanıcıya kadar",
     "Main navigation": "Ana gezinme", "Product features": "Ürün özellikleri", "GenomQC home": "GenomQC ana sayfa",
     "Public beta · Runs in your browser": "Herkese açık beta · Tarayıcınızda çalışır", "From QC output": "QC çıktısından", "to a decision.": "karara.",
     "Load a MultiQC export. GenomQC classifies each RNA-seq sample as PASS, WARN or FAIL and explains the reason and next action.": "Bir MultiQC dışa aktarımı yükleyin. GenomQC her RNA-seq örneğini PASS, WARN veya FAIL olarak sınıflandırır; gerekçeyi ve sonraki adımı açıklar.",
@@ -69,6 +69,16 @@
     currentLanguage = language === "tr" ? "tr" : "en";
     document.documentElement.lang = currentLanguage;
     walk(currentLanguage);
+    const titles = {
+      "/genomqc-rnaseq-qc/": "GenomQC — RNA-seq QC Karar Raporu",
+      "/genomqc-rnaseq-qc/pro.html": "GenomQC Pro — Kurucu Laboratuvar Lisansı",
+      "/genomqc-rnaseq-qc/multiqc-rnaseq-qc-decisions.html": "MultiQC RNA-seq QC kararları: pratik kılavuz | GenomQC",
+      "/genomqc-rnaseq-qc/privacy.html": "Gizlilik — GenomQC",
+      "/genomqc-rnaseq-qc/terms.html": "Koşullar — GenomQC",
+      "/genomqc-rnaseq-qc/refunds.html": "İadeler — GenomQC"
+    };
+    if (!document.documentElement.dataset.englishTitle) document.documentElement.dataset.englishTitle = document.title;
+    document.title = currentLanguage === "tr" && titles[location.pathname] ? titles[location.pathname] : document.documentElement.dataset.englishTitle;
     document.querySelectorAll("[data-genomqc-language]").forEach((button) => {
       const active = button.dataset.genomqcLanguage === currentLanguage;
       button.classList.toggle("is-active", active);
