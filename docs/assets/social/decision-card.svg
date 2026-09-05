@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#f3efe5"/>
+  <path d="M0 0h1200v14H0z" fill="#145ee8"/><path d="M0 1186h1200v14H0z" fill="#ef5a34"/>
+  <g transform="translate(72 64)"><rect width="58" height="58" rx="4" fill="#091923"/><text x="29" y="38" text-anchor="middle" font-family="Arial" font-size="22" font-weight="900" fill="#fff">GQ</text><text x="77" y="38" font-family="Arial" font-size="28" font-weight="800" fill="#091923">GenomQC</text></g>
+  <text x="72" y="215" font-family="Consolas,monospace" font-size="19" font-weight="700" letter-spacing="3" fill="#145ee8">ONE COHORT. CLEAR NEXT ACTIONS.</text>
+  <text x="70" y="305" font-family="Georgia,serif" font-size="70" font-weight="700" fill="#091923">Not another wall of plots.</text>
+  <text x="72" y="360" font-family="Arial" font-size="26" fill="#52606a">A transparent decision layer for common RNA-seq QC signals.</text>
+  <g transform="translate(72 430)">
+    <rect width="1056" height="148" rx="8" fill="#091923"/>
+    <text x="30" y="43" font-family="Consolas,monospace" font-size="15" font-weight="700" letter-spacing="2" fill="#8999a3">RUN DECISION SUMMARY</text>
+    <text x="30" y="105" font-family="Arial" font-size="39" font-weight="800" fill="#fff">12 samples</text>
+    <rect x="765" y="36" width="245" height="75" rx="7" fill="#f0b429" fill-opacity=".16" stroke="#f0b429"/>
+    <text x="888" y="84" text-anchor="middle" font-family="Consolas,monospace" font-size="28" font-weight="900" fill="#ffd369">WARN</text>
+  </g>
+  <g transform="translate(72 610)" font-family="Arial">
+    <g><rect width="332" height="296" rx="8" fill="#fffdf8" stroke="#b9b6ad"/><text x="25" y="43" font-family="Consolas,monospace" font-size="15" font-weight="700" fill="#52606a">SAMPLE_01</text><text x="25" y="102" font-size="34" font-weight="800" fill="#28a66a">PASS</text><path d="M25 132h282" stroke="#d7d3c9"/><text x="25" y="174" font-size="20" fill="#52606a">Q30</text><text x="307" y="174" text-anchor="end" font-size="20" font-weight="700" fill="#091923">92.1%</text><text x="25" y="219" font-size="20" fill="#52606a">Retention</text><text x="307" y="219" text-anchor="end" font-size="20" font-weight="700" fill="#091923">96.8%</text><text x="25" y="264" font-size="18" fill="#52606a">Proceed with qualified review.</text></g>
+    <g transform="translate(362)"><rect width="332" height="296" rx="8" fill="#fffdf8" stroke="#b9b6ad"/><text x="25" y="43" font-family="Consolas,monospace" font-size="15" font-weight="700" fill="#52606a">SAMPLE_02</text><text x="25" y="102" font-size="34" font-weight="800" fill="#c88600">WARN</text><path d="M25 132h282" stroke="#d7d3c9"/><text x="25" y="174" font-size="20" fill="#52606a">Duplication</text><text x="307" y="174" text-anchor="end" font-size="20" font-weight="700" fill="#091923">48.6%</text><text x="25" y="219" font-size="20" fill="#52606a">Adapter</text><text x="307" y="219" text-anchor="end" font-size="20" font-weight="700" fill="#091923">3.4%</text><text x="25" y="264" font-size="18" fill="#52606a">Review library complexity.</text></g>
+    <g transform="translate(724)"><rect width="332" height="296" rx="8" fill="#fffdf8" stroke="#b9b6ad"/><text x="25" y="43" font-family="Consolas,monospace" font-size="15" font-weight="700" fill="#52606a">SAMPLE_03</text><text x="25" y="102" font-size="34" font-weight="800" fill="#e8514a">FAIL</text><path d="M25 132h282" stroke="#d7d3c9"/><text x="25" y="174" font-size="20" fill="#52606a">Q30</text><text x="307" y="174" text-anchor="end" font-size="20" font-weight="700" fill="#091923">71.8%</text><text x="25" y="219" font-size="20" fill="#52606a">Retention</text><text x="307" y="219" text-anchor="end" font-size="20" font-weight="700" fill="#091923">63.5%</text><text x="25" y="264" font-size="18" fill="#52606a">Inspect trimming and quality.</text></g>
+  </g>
+  <text x="72" y="1015" font-family="Arial" font-size="24" font-weight="800" fill="#091923">Load MultiQC JSON, TSV or CSV. Get the reason beside every status.</text>
+  <text x="72" y="1070" font-family="Consolas,monospace" font-size="21" font-weight="700" fill="#145ee8">genomqc.pages.dev</text>
+  <text x="1128" y="1070" text-anchor="end" font-family="Arial" font-size="17" fill="#52606a">Research use only · A LyoVexa brand</text>
+</svg>
+

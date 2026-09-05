@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#091923"/>
+  <circle cx="1090" cy="110" r="310" fill="#145ee8" opacity=".18"/><circle cx="1020" cy="1150" r="350" fill="#35b9b3" opacity=".1"/>
+  <g transform="translate(76 66)"><rect width="58" height="58" rx="4" fill="#ef5a34"/><text x="29" y="38" text-anchor="middle" font-family="Arial" font-size="22" font-weight="900" fill="#fff">GQ</text><text x="77" y="36" font-family="Arial" font-size="28" font-weight="800" fill="#fff">GenomQC</text><text x="77" y="58" font-family="Consolas,monospace" font-size="12" font-weight="700" letter-spacing="2" fill="#79aaff">PRO · FOUNDER LAB LICENSE</text></g>
+  <text x="76" y="270" font-family="Georgia,serif" font-size="75" font-weight="700" fill="#fff">QC decisions that match</text>
+  <text x="76" y="355" font-family="Georgia,serif" font-size="75" font-style="italic" fill="#ef5a34">your lab.</text>
+  <text x="78" y="420" font-family="Arial" font-size="25" fill="#c4cdd2">An offline RNA-seq QC workspace with configurable rules,</text>
+  <text x="78" y="458" font-family="Arial" font-size="25" fill="#c4cdd2">reusable profiles and lab-branded reports.</text>
+  <g transform="translate(76 545)" font-family="Arial">
+    <rect width="650" height="360" rx="10" fill="#fffdfa"/>
+    <text x="30" y="48" font-family="Consolas,monospace" font-size="15" font-weight="700" letter-spacing="2" fill="#145ee8">FOUNDER LAB PROGRAM</text>
+    <text x="30" y="118" font-family="Georgia,serif" font-size="56" font-weight="700" fill="#091923">919 TRY</text>
+    <text x="30" y="155" font-size="18" fill="#52606a">one-time · up to 5 users</text>
+    <path d="M30 178h590" stroke="#d4d0c7"/>
+    <g font-size="20" fill="#091923"><text x="30" y="218">✓ Custom thresholds and reusable profiles</text><text x="30" y="260">✓ Branded PDF, JSON and CSV output</text><text x="30" y="302">✓ English / Turkish reports</text><text x="30" y="344">✓ All v1.x updates</text></g>
+  </g>
+  <g transform="translate(770 545)" font-family="Arial">
+    <rect width="354" height="360" rx="10" fill="#132b39" stroke="#40505a"/>
+    <text x="30" y="48" font-family="Consolas,monospace" font-size="14" font-weight="700" letter-spacing="2" fill="#75a7ff">LOCAL PROCESSING</text>
+    <text x="30" y="110" font-size="27" font-weight="800" fill="#fff">Your QC exports</text><text x="30" y="145" font-size="27" font-weight="800" fill="#fff">stay on-device.</text>
+    <path d="M30 180h294" stroke="#40505a"/>
+    <text x="30" y="228" font-size="18" fill="#aab8bf">No application server</text><text x="30" y="264" font-size="18" fill="#aab8bf">No raw-data upload</text><text x="30" y="300" font-size="18" fill="#aab8bf">Works offline</text><circle cx="44" cy="332" r="7" fill="#28a66a"/><text x="62" y="339" font-family="Consolas,monospace" font-size="16" font-weight="700" fill="#69e2a5">READY</text>
+  </g>
+  <rect x="76" y="965" width="470" height="82" rx="5" fill="#145ee8"/>
+  <text x="106" y="1000" font-family="Consolas,monospace" font-size="15" font-weight="700" letter-spacing="2" fill="#bcd3ff">VIEW DETAILS &amp; TRY THE BETA</text>
+  <text x="106" y="1030" font-family="Arial" font-size="22" font-weight="800" fill="#fff">genomqc.pages.dev/pro</text>
+  <text x="76" y="1115" font-family="Arial" font-size="18" fill="#9ba9b1">Research use only · Shopier checkout · A LyoVexa brand</text>
+</svg>
+
