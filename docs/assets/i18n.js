@@ -30,6 +30,11 @@
     "We want the product to work as described. Contact support promptly if delivery fails or a material product problem prevents use.": "Ürünün açıklandığı şekilde çalışmasını istiyoruz. Teslimat başarısız olursa veya önemli bir ürün sorunu kullanımı engellerse hemen destekle iletişime geçin.", "within 14 calendar days of purchase. Include the order number and a short explanation. Do not send payment-card data or sensitive research files.": "satın alma tarihinden itibaren 14 takvim günü içinde e-posta gönderin. Sipariş numarasını ve kısa bir açıklamayı ekleyin. Ödeme kartı verilerini veya hassas araştırma dosyalarını göndermeyin.", "Duplicate charge.": "Mükerrer tahsilat.", "The purchased download was not delivered and support cannot restore access.": "Satın alınan indirme teslim edilmedi ve destek erişimi geri sağlayamıyor.", "A reproducible material defect prevents the product from performing a function explicitly described on the product page, and a reasonable fix or workaround cannot be provided.": "Tekrarlanabilir önemli bir kusur, ürünün ürün sayfasında açıkça belirtilen bir işlevi yerine getirmesini engelliyor ve makul bir düzeltme veya geçici çözüm sağlanamıyor.", "Because GenomQC Pro is delivered as downloadable digital content, change-of-mind refunds after download may be unavailable where the customer expressly agreed to immediate delivery and acknowledged any resulting limitation of a withdrawal right. This policy does not restrict mandatory consumer rights under applicable law.": "GenomQC Pro indirilebilir dijital içerik olarak teslim edildiğinden, müşterinin anında teslimatı açıkça kabul ettiği ve cayma hakkındaki sınırlamayı onayladığı durumlarda indirme sonrası fikir değiştirmeye dayalı iadeler mümkün olmayabilir. Bu politika yürürlükteki hukukun zorunlu tüketici haklarını kısıtlamaz.", "Approved refunds are handled through the Shopier order. The time for a refund to appear on your statement depends on the payment provider and your bank. Contact support with your order number for help.": "Onaylanan iadeler Shopier siparişi üzerinden işlenir. İadenin ekstrenize yansıma süresi ödeme sağlayıcısına ve bankanıza bağlıdır. Yardım için sipariş numaranızla desteğe başvurun.", "A LyoVexa brand": "Bir LyoVexa markası"
   }));
 
+  tr.set(
+    "The public website is hosted by Cloudflare Pages. Cloudflare may process ordinary technical information such as IP address, browser details, and access logs under its own privacy terms. GenomQC does not currently add third-party advertising or behavioral analytics to the site.",
+    "Herkese açık web sitesi Cloudflare Pages üzerinde barındırılır. Cloudflare, kendi gizlilik koşulları kapsamında IP adresi, tarayıcı ayrıntıları ve erişim kayıtları gibi olağan teknik bilgileri işleyebilir. GenomQC şu anda siteye üçüncü taraf reklam veya davranışsal analiz eklemez."
+  );
+
   const originalText = new WeakMap();
   const originalAttributes = new WeakMap();
   let currentLanguage = "en";
@@ -70,6 +75,12 @@
     document.documentElement.lang = currentLanguage;
     walk(currentLanguage);
     const titles = {
+      "/": "GenomQC — RNA-seq QC Karar Raporu",
+      "/pro.html": "GenomQC Pro — Kurucu Laboratuvar Lisansı",
+      "/multiqc-rnaseq-qc-decisions.html": "MultiQC RNA-seq QC kararları: pratik kılavuz | GenomQC",
+      "/privacy.html": "Gizlilik — GenomQC",
+      "/terms.html": "Koşullar — GenomQC",
+      "/refunds.html": "İadeler — GenomQC",
       "/genomqc-rnaseq-qc/": "GenomQC — RNA-seq QC Karar Raporu",
       "/genomqc-rnaseq-qc/pro.html": "GenomQC Pro — Kurucu Laboratuvar Lisansı",
       "/genomqc-rnaseq-qc/multiqc-rnaseq-qc-decisions.html": "MultiQC RNA-seq QC kararları: pratik kılavuz | GenomQC",
@@ -112,3 +123,4 @@
   try { preferred = localStorage.getItem(storageKey) || "en"; } catch (error) { /* Storage may be disabled. */ }
   apply(preferred, false);
 })();
+

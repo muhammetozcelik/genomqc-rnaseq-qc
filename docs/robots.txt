@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://muhammetozcelik.github.io/genomqc-rnaseq-qc/sitemap.xml
+Sitemap: https://genomqc.pages.dev/sitemap.xml
+

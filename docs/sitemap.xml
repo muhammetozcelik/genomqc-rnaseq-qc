@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://muhammetozcelik.github.io/genomqc-rnaseq-qc/</loc></url>
-  <url><loc>https://muhammetozcelik.github.io/genomqc-rnaseq-qc/pro.html</loc></url>
-  <url><loc>https://muhammetozcelik.github.io/genomqc-rnaseq-qc/demo/</loc></url>
-  <url><loc>https://muhammetozcelik.github.io/genomqc-rnaseq-qc/multiqc-rnaseq-qc-decisions.html</loc></url>
-  <url><loc>https://muhammetozcelik.github.io/genomqc-rnaseq-qc/privacy.html</loc></url>
-  <url><loc>https://muhammetozcelik.github.io/genomqc-rnaseq-qc/terms.html</loc></url>
-  <url><loc>https://muhammetozcelik.github.io/genomqc-rnaseq-qc/refunds.html</loc></url>
+  <url><loc>https://genomqc.pages.dev/</loc></url>
+  <url><loc>https://genomqc.pages.dev/pro.html</loc></url>
+  <url><loc>https://genomqc.pages.dev/demo/</loc></url>
+  <url><loc>https://genomqc.pages.dev/multiqc-rnaseq-qc-decisions.html</loc></url>
+  <url><loc>https://genomqc.pages.dev/privacy.html</loc></url>
+  <url><loc>https://genomqc.pages.dev/terms.html</loc></url>
+  <url><loc>https://genomqc.pages.dev/refunds.html</loc></url>
 </urlset>
+
