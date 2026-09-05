@@ -5,7 +5,7 @@
 [![Release](https://img.shields.io/badge/release-v0.1.0-2f855a.svg)](CHANGELOG.md)
 [**Open the GenomQC Decision Report →**](https://genomqc.pages.dev/)
 · [View the example MultiQC report](https://genomqc.pages.dev/demo/)
-· [Read the practical RNA-seq QC decision guide](https://genomqc.pages.dev/multiqc-rnaseq-qc-decisions.html)
+· [Read the practical RNA-seq QC decision guide](https://genomqc.pages.dev/multiqc-rnaseq-qc-decisions)
 
 GenomQC is a reproducible quality-control and preprocessing workflow for
 paired-end RNA-seq FASTQ files. It validates read pairing, records input
@@ -28,7 +28,7 @@ GenomQC Pro is a separate downloadable lab workspace for teams that need
 configurable WARN/FAIL thresholds, reusable decision profiles, lab-branded PDF
 reports, English/Turkish findings, and structured JSON/CSV exports. The public
 MIT-licensed beta remains free; the Pro product and its Founder Lab License are
-described on the [product page](https://genomqc.pages.dev/pro.html).
+described on the [product page](https://genomqc.pages.dev/pro).
 [Buy GenomQC Pro for 919 TRY through LyoVexa on Shopier](https://www.shopier.com/lyovexa/50580150).
 
 GenomQC is a LyoVexa brand.
