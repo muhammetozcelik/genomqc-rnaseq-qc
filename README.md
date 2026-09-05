@@ -28,6 +28,9 @@ configurable WARN/FAIL thresholds, reusable decision profiles, lab-branded PDF
 reports, English/Turkish findings, and structured JSON/CSV exports. The public
 MIT-licensed beta remains free; the Pro product and its Founder Lab License are
 described on the [product page](https://muhammetozcelik.github.io/genomqc-rnaseq-qc/pro.html).
+[Buy GenomQC Pro for 919 TRY through LyoVexa on Shopier](https://www.shopier.com/lyovexa/50580150).
+
+GenomQC is a LyoVexa brand.
 
 ## What it produces
 
@@ -158,4 +161,5 @@ metadata in [CITATION.cff](CITATION.cff).
 This public repository is released under the [MIT License](LICENSE). The
 separately distributed GenomQC Pro product uses the commercial license included
 with that download.
+
 
