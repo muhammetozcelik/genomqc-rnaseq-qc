@@ -77,7 +77,11 @@
           <div>
             <p class="section-index">02 · DECISION REPORT</p>
             <h2 id="report-title">Run decision summary</h2>
-            <p id="source-label">Source: GenomQC demo cohort</p>
+            <div class="report-provenance">
+              <span class="demo-pill" id="dataset-kind">ILLUSTRATIVE DATASET</span>
+              <p id="source-label">Source: GenomQC demo cohort</p>
+              <p id="generated-label">Generated in this browser</p>
+            </div>
           </div>
           <div class="report-actions">
             <button class="button button-light" id="download-json" type="button">Download JSON</button>
@@ -91,6 +95,18 @@
             <strong class="status-badge status-warn" id="overall-status">WARN</strong>
           </div>
           <div class="metric-grid" id="metric-grid"></div>
+        </div>
+
+        <div class="decision-gate" id="decision-gate" aria-live="polite">
+          <div>
+            <p class="card-kicker">REVIEW GATE</p>
+            <strong id="gate-title">Hold before downstream analysis</strong>
+          </div>
+          <p id="gate-copy">One or more samples cross a FAIL boundary and require qualified review.</p>
+          <div class="gate-meta">
+            <span><b id="coverage-value">100%</b> metric coverage</span>
+            <span><b id="queue-value">1</b> sample in review queue</span>
+          </div>
         </div>
 
         <div class="insight-grid">
@@ -122,6 +138,35 @@
             <tbody id="sample-table"></tbody>
           </table>
         </div>
+
+        <section class="review-queue-section" aria-labelledby="review-queue-title">
+          <div class="subsection-heading">
+            <div>
+              <p class="card-kicker">DECISION TRACE</p>
+              <h3 id="review-queue-title">Samples requiring attention</h3>
+            </div>
+            <p>Every flag stays connected to its observed value, decision and recommended next action.</p>
+          </div>
+          <div class="review-queue" id="review-queue"></div>
+        </section>
+
+        <section class="policy-panel" aria-labelledby="policy-title">
+          <div class="policy-intro">
+            <p class="card-kicker">DECISION POLICY · DEFAULT RNA-SEQ PROFILE</p>
+            <h3 id="policy-title">Visible rules. No black box.</h3>
+            <p>These screening thresholds are transparent starting points. Validate them against the assay, organism, library preparation, platform and laboratory SOP.</p>
+          </div>
+          <dl class="threshold-grid" id="threshold-grid"></dl>
+        </section>
+
+        <aside class="report-upgrade">
+          <div>
+            <p class="card-kicker">MAKE IT YOUR LAB'S REPORT</p>
+            <h3>Replace generic thresholds with your own decision profile.</h3>
+            <p>GenomQC Pro adds reusable thresholds, lab identity and structured exports—without uploading the QC file.</p>
+          </div>
+          <a class="button button-primary" href="./pro.html">See Pro workflow</a>
+        </aside>
       </section>
 
       <section class="method-section" id="method" aria-labelledby="method-title">
@@ -195,6 +240,21 @@
             <a class="product-details-link" href="./pro.html">View full product details →</a>
             <small>Shopier checkout with automatic ZIP delivery after payment. One-time 919 TRY.</small>
           </article>
+          <article class="price-card service-price">
+            <div>
+              <p class="plan-name">LAB SETUP · DONE WITH YOU</p>
+              <p class="price"><strong>2,490 TRY</strong><span> · one-time technical setup</span></p>
+            </div>
+            <ul>
+              <li>GenomQC Pro Founder Lab License included</li>
+              <li>One custom profile built from your documented SOP</li>
+              <li>Lab identity, export check and 7-day setup support</li>
+            </ul>
+            <div class="service-action">
+              <a class="button button-dark" href="mailto:genomqc@outlook.com?subject=GenomQC%20Lab%20Setup&amp;body=Lab%20or%20team%20name%3A%0AApproximate%20sample%20count%3A%0AExport%20format%3A%20JSON%20%2F%20TSV%20%2F%20CSV%0A">Request lab setup</a>
+              <small>Technical configuration only. Your qualified team supplies and approves the scientific thresholds.</small>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -215,10 +275,9 @@
       </div>
     </footer>
 
-    <script src="./assets/i18n.js?v=20260906-5" defer></script>
-    <script src="./assets/qc-core.js?v=20260906-5" defer></script>
-    <script src="./assets/app.js?v=20260906-5" defer></script>
+    <script src="./assets/i18n.js?v=20260906-6" defer></script>
+    <script src="./assets/qc-core.js?v=20260906-6" defer></script>
+    <script src="./assets/app.js?v=20260906-6" defer></script>
   </body>
 </html>
-
 
