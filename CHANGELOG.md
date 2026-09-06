@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.1 - 2026-09-07
+
+- Fixed percentage-sign values such as `0.5%` being multiplied twice.
+- Preserved blank, NA, null and non-numeric cells as missing instead of zero.
+- Added unit-aware parsing for MultiQC 1.35 JSON and general-statistics TSV exports.
+- Stopped evaluation when a detected sample has fewer than two recognized metrics.
+- Added reproducible MultiQC 1.35 compatibility fixtures and a public field/unit contract.
+- Replaced the unsupported public case claim with verifiable compatibility evidence.
+
 ## 1.1.0 - 2026-09-04
 
 - Added configurable decision thresholds to the browser QC engine while

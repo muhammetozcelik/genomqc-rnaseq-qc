@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="A concise product demonstration of the GenomQC RNA-seq quality-control decision workspace." />
+    <meta name="theme-color" content="#071923" />
+    <title>Product demo | GenomQC</title>
+    <link rel="canonical" href="https://genomqc.pages.dev/product-demo" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <style>
+      :root { color-scheme: dark; --ink:#071923; --panel:#0d2632; --line:#294552; --text:#f4f0e8; --muted:#abc0c8; --green:#39dc99; --blue:#70a7ff; }
+      * { box-sizing:border-box; }
+      body { margin:0; background:var(--ink); color:var(--text); font:16px/1.6 Inter,ui-sans-serif,system-ui,sans-serif; }
+      header,main,footer { width:min(1120px,calc(100% - 40px)); margin:auto; }
+      header { display:flex; justify-content:space-between; align-items:center; padding:25px 0; border-bottom:1px solid var(--line); }
+      header a,footer a { color:var(--text); text-decoration:none; }
+      header span,.kicker { color:var(--green); font:800 12px/1 ui-monospace,monospace; letter-spacing:.12em; }
+      main { padding:clamp(54px,8vw,100px) 0; }
+      .intro { max-width:780px; }
+      h1 { margin:18px 0; font:500 clamp(44px,7vw,82px)/.98 Georgia,serif; letter-spacing:-.045em; }
+      .lede { color:var(--muted); font-size:18px; }
+      .video-shell { margin-top:42px; padding:10px; border:1px solid var(--line); background:var(--panel); box-shadow:0 28px 80px rgba(0,0,0,.32); }
+      video { display:block; width:100%; aspect-ratio:16/9; background:#000; }
+      .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:25px; }
+      .button { display:inline-block; padding:12px 17px; border:1px solid var(--line); color:var(--text); text-decoration:none; font-weight:750; }
+      .button.primary { border-color:var(--green); background:var(--green); color:#061a13; }
+      .facts { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:42px; background:var(--line); border:1px solid var(--line); }
+      .facts div { padding:22px; background:var(--panel); }
+      .facts strong { display:block; margin-bottom:8px; }
+      .facts span { color:var(--muted); font-size:14px; }
+      footer { display:flex; justify-content:space-between; gap:20px; padding:28px 0; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }
+      @media (max-width:720px) { .facts { grid-template-columns:1fr; } footer { flex-direction:column; } }
+    </style>
+  </head>
+  <body>
+    <header><a href="./"><strong>GQ · GenomQC</strong></a><span>PRODUCT DEMO</span></header>
+    <main>
+      <section class="intro">
+        <p class="kicker">RNA-SEQ QC DECISION WORKSPACE</p>
+        <h1>From MultiQC output to a clear decision trail.</h1>
+        <p class="lede">This 20-second walkthrough shows the local browser workflow: load a supported QC export, review sample-level decisions, and trace each flag to evidence and a next action.</p>
+      </section>
+      <div class="video-shell">
+        <video controls playsinline preload="metadata" poster="./assets/genomqc-product-demo-poster.png">
+          <source src="./assets/genomqc-product-demo.mp4" type="video/mp4" />
+          <track default kind="captions" srclang="en" label="English" src="./assets/genomqc-product-demo.vtt" />
+          Your browser does not support embedded video.
+        </video>
+      </div>
+      <div class="actions">
+        <a class="button primary" href="./">Try the free beta</a>
+        <a class="button" href="./pro.html">View pricing</a>
+        <a class="button" href="./compatibility.html">Compatibility evidence</a>
+      </div>
+      <section class="facts" aria-label="Product facts">
+        <div><strong>Local processing</strong><span>The selected QC export is processed in the browser.</span></div>
+        <div><strong>Verified input contract</strong><span>Tested with MultiQC 1.35 JSON and general-statistics TSV fixtures.</span></div>
+        <div><strong>Research use</strong><span>Supports QC prioritization; scientific review remains with qualified users.</span></div>
+      </section>
+    </main>
+    <footer><span>© 2026 GenomQC · A LyoVexa brand</span><span><a href="mailto:genomqc@outlook.com">genomqc@outlook.com</a></span></footer>
+    <!-- Cloudflare Web Analytics --><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"35f7cd3b60834b8f97886a4f97018d94"}'></script><!-- End Cloudflare Web Analytics -->
+  </body>
+</html>

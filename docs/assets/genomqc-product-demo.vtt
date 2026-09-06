@@ -1,0 +1,14 @@
+WEBVTT
+
+00:00:00.450 --> 00:00:04.380
+Turn RNA-seq quality control into a clear decision trail.
+
+00:00:05.070 --> 00:00:12.800
+With GenomQC, load your MultiQC export, review pass, warning, and failure results,
+and see the evidence behind every call.
+
+00:00:13.480 --> 00:00:15.400
+Your data stays in the browser.
+
+00:00:16.080 --> 00:00:19.700
+Try the free beta at genomqc.pages.dev.

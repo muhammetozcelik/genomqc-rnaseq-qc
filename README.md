@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/muhammetozcelik/genomqc-rnaseq-qc/actions/workflows/ci.yml/badge.svg)](https://github.com/muhammetozcelik/genomqc-rnaseq-qc/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/badge/release-v1.1.0--beta-2f855a.svg)](https://github.com/muhammetozcelik/genomqc-rnaseq-qc/releases/tag/v1.1.0)
+[![Release](https://img.shields.io/badge/release-v1.1.1--beta-2f855a.svg)](CHANGELOG.md)
 [**Open the GenomQC Decision Report →**](https://genomqc.pages.dev/)
 · [View the example MultiQC report](https://genomqc.pages.dev/demo/)
 · [Read the practical RNA-seq QC decision guide](https://genomqc.pages.dev/multiqc-rnaseq-qc-decisions)
@@ -21,6 +21,13 @@ The public beta turns MultiQC JSON, TSV or CSV exports into an explainable
 sample-level PASS / WARN / FAIL report. Processing is performed locally in the
 browser: the selected file is not uploaded to a GenomQC server. Reports can be
 downloaded as JSON or printed to PDF.
+
+Compatibility is verified against MultiQC 1.35 `multiqc_data.json` and
+`multiqc_general_stats.txt` outputs generated from the official MultiQC test
+data. The exact field and unit contract, limitations, and fixture provenance are
+documented on the [compatibility evidence page](https://genomqc.pages.dev/compatibility).
+Missing values are not treated as zero, and evaluation stops when a sample has
+fewer than two recognized metrics.
 
 ## GenomQC Pro
 
@@ -168,4 +175,3 @@ metadata in [CITATION.cff](CITATION.cff).
 This public repository is released under the [MIT License](LICENSE). The
 separately distributed GenomQC Pro product uses the commercial license included
 with that download.
-

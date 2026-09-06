@@ -1,0 +1,28 @@
+{
+  "report_general_stats_data": {
+    "fastp": {
+      "smalltest_S10": {
+        "filtering_result_passed_filter_reads": 16034314,
+        "pct_duplication": 30.703000000000003,
+        "before_filtering_total_reads": 16763944,
+        "after_filtering_total_reads": 16034314,
+        "after_filtering_q30_rate": 0.941898,
+        "after_filtering_gc_content": 0.467941,
+        "pct_surviving_reads": 95.64762325619795,
+        "pct_surviving_bases": 94.6974696558957,
+        "pct_adapter": 0.8814870772653499
+      }
+    },
+    "fastqc": {
+      "SRR1067503_1": {
+        "total_sequences": 30680980,
+        "percent_gc": 44,
+        "avg_sequence_length": 36,
+        "median_sequence_length": 36,
+        "percent_duplicates": 13.158357833208953,
+        "percent_fails": 8.333333333333332
+      }
+    }
+  },
+  "config_version": "1.35"
+}

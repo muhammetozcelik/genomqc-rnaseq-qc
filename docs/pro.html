@@ -17,7 +17,7 @@
     <link rel="canonical" href="https://genomqc.pages.dev/pro" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./assets/pro-marketing.css" />
-    <script src="./assets/i18n.js?v=20260906-6" defer></script>
+    <script src="./assets/i18n.js?v=20260907-1" defer></script>
   </head>
   <body>
     <header class="pro-nav">
@@ -91,11 +91,12 @@
         <div class="section-title"><p class="kicker">FAQ</p><h2>Clear before you buy.</h2></div>
         <details open><summary>Does GenomQC Pro upload my data?</summary><p>No. The downloadable app processes selected QC exports inside your browser. Your browser or operating system may create ordinary local files and print jobs when you export a report.</p></details>
         <details><summary>Is this a clinical product?</summary><p>No. It is a research-use QC prioritization tool and does not provide diagnosis, treatment recommendations, or clinical interpretation.</p></details>
-        <details><summary>Which files are supported?</summary><p>MultiQC JSON exports and TSV/CSV tables with recognizable sample-level reads, Q30, GC, duplication, adapter, or retention metrics. Maximum input size is 10 MB.</p></details>
+        <details><summary>Which files are supported?</summary><p>Verified with MultiQC 1.35 multiqc_data.json and multiqc_general_stats.txt. Documented CSV/TSV tables are also accepted when every sample has at least two recognized metrics. See the <a href="./compatibility.html">field and unit contract</a>. Maximum input size is 10 MB.</p></details>
         <details><summary>Why is the public version free?</summary><p>The public MIT-licensed version demonstrates the core decision layer. Pro adds configurable thresholds, reusable profiles, branded reports, bilingual output, and a separate lab license.</p></details>
       </section>
     </main>
 
-    <footer><div><strong>GenomQC Pro</strong><span>Research-use RNA-seq QC decision workspace · A LyoVexa brand</span></div><div><a href="./multiqc-rnaseq-qc-decisions.html">RNA-seq QC guide</a><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a><a href="./refunds.html">Refunds</a><a href="mailto:genomqc@outlook.com">Support</a></div></footer>
+    <footer><div><strong>GenomQC Pro</strong><span>Research-use RNA-seq QC decision workspace · A LyoVexa brand</span></div><div><a href="./compatibility.html">Compatibility</a><a href="./multiqc-rnaseq-qc-decisions.html">RNA-seq QC guide</a><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a><a href="./refunds.html">Refunds</a><a href="mailto:genomqc@outlook.com">Support</a></div></footer>
+    <!-- Cloudflare Web Analytics --><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"35f7cd3b60834b8f97886a4f97018d94"}'></script><!-- End Cloudflare Web Analytics -->
   </body>
 </html>

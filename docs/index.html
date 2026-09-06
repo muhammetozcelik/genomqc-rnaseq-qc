@@ -44,6 +44,7 @@
             <span>No installation</span>
             <span>Immediate result</span>
           </div>
+          <a class="hero-pilot-link" href="#compatibility-check">Get a free MultiQC compatibility check →</a>
         </div>
 
         <section class="upload-card" aria-labelledby="upload-title">
@@ -198,21 +199,38 @@
 
         <aside class="case-strip">
           <div>
-            <p class="card-kicker">REAL CASE · GSM461178</p>
-            <h3>From raw reads to a reproducible QC report</h3>
+            <p class="card-kicker">VERIFIED FORMAT TEST · MULTIQC 1.35</p>
+            <h3>Tested against official MultiQC fixtures</h3>
           </div>
           <div class="case-stats">
-            <span><strong>65.8M</strong> raw reads</span>
-            <span><strong>99.0%</strong> retention</span>
-            <span><strong>PASS</strong> final decision</span>
+            <span><strong>JSON + TSV</strong> formats</span>
+            <span><strong>6</strong> mapped metrics</span>
+            <span><strong>PASSING</strong> parser tests</span>
           </div>
-          <a class="text-link" href="./demo/">Open case report ↗</a>
+          <a class="text-link" href="./compatibility.html">Read compatibility evidence ↗</a>
         </aside>
+      </section>
+
+      <section class="pilot-section" id="compatibility-check" aria-labelledby="pilot-title">
+        <div class="pilot-copy">
+          <p class="section-index">04 · BETA COMPATIBILITY CHECK</p>
+          <h2 id="pilot-title">Check your export<br />before you buy.</h2>
+          <p>Five complimentary checks are available for RNA-seq teams. Tell us your MultiQC version and export format; we will confirm what GenomQC can read and flag any mapping gaps.</p>
+        </div>
+        <div class="pilot-panel">
+          <div class="pilot-steps" aria-label="Compatibility check steps">
+            <div><span>01</span><strong>Request</strong><small>MultiQC version, export type and approximate sample count.</small></div>
+            <div><span>02</span><strong>Check</strong><small>Metric recognition, sample mapping and missing-field risks.</small></div>
+            <div><span>03</span><strong>Decide</strong><small>Use the free beta, buy Pro, or request a configured Lab Setup.</small></div>
+          </div>
+          <a class="button button-primary pilot-button" href="mailto:genomqc@outlook.com?subject=Free%20GenomQC%20Compatibility%20Check&amp;body=MultiQC%20version%3A%0AExport%20format%3A%20JSON%20%2F%20TSV%20%2F%20CSV%0AApproximate%20sample%20count%3A%0AWhat%20would%20you%20like%20to%20check%3F%0A%0APlease%20do%20not%20attach%20raw%20sequencing%20data%20or%20patient%20information.%0A">Request a free check</a>
+          <p class="pilot-note">Start with metadata only. Do not email raw sequencing data, patient information, passwords or payment-card details.</p>
+        </div>
       </section>
 
       <section class="pricing-section" id="pricing" aria-labelledby="pricing-title">
         <div class="pricing-intro">
-          <p class="section-index">04 · ACCESS</p>
+          <p class="section-index">05 · ACCESS</p>
           <h2 id="pricing-title">Start with the free report.<br />Upgrade when your lab needs more.</h2>
           <p>The browser report is free. GenomQC Pro is a downloadable offline workspace with configurable thresholds, reusable profiles and branded decision reports.</p>
         </div>
@@ -275,9 +293,10 @@
       </div>
     </footer>
 
-    <script src="./assets/i18n.js?v=20260906-6" defer></script>
-    <script src="./assets/qc-core.js?v=20260906-6" defer></script>
+    <script src="./assets/i18n.js?v=20260907-1" defer></script>
+    <script src="./assets/qc-core.js?v=20260907-1" defer></script>
     <script src="./assets/app.js?v=20260906-6" defer></script>
+    <!-- Cloudflare Web Analytics --><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"35f7cd3b60834b8f97886a4f97018d94"}'></script><!-- End Cloudflare Web Analytics -->
   </body>
 </html>
 

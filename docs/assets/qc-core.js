@@ -12,12 +12,12 @@
   ];
 
   const metricAliases = {
-    reads: [/total.?reads/, /total.?sequences/, /input.?read.?pairs/, /read.?count/, /^reads?$/],
-    q30: [/q30/, /percent.?bases.?q30/, /bases.?q30/],
-    gc: [/percent.?gc/, /gc.?percent/, /^gc$/],
-    duplication: [/duplication/, /percent.?duplicates/, /duplicate.?percent/],
-    adapter: [/adapter.?percent/, /percent.?adapter/, /adapter.?content/, /^adapter$/],
-    retained: [/retained/, /passed.?filter.?percent/, /surviving.?percent/, /reads.?after.?filter.?percent/]
+    reads: [/(^|_)filtering_result_passed_filter_reads$/, /(^|_)after_filtering_total_reads$/, /(^|_)before_filtering_total_reads$/, /(^|_)total_(reads|sequences)$/, /(^|_)input_read_pairs$/, /(^|_)read_count$/, /^reads?$/],
+    q30: [/(^|_)after_filtering_q30_rate$/, /(^|_)q30$/, /(^|_)q30_(pct|percent|rate)$/, /(^|_)percent_bases_q30$/, /(^|_)bases_q30_percent$/],
+    gc: [/(^|_)after_filtering_gc_content$/, /(^|_)gc$/, /(^|_)gc_(pct|percent|content)$/, /(^|_)percent_gc$/],
+    duplication: [/(^|_)duplication$/, /(^|_)pct_duplication$/, /(^|_)percent_duplicates$/, /(^|_)duplicate_percent$/],
+    adapter: [/(^|_)adapter$/, /(^|_)pct_adapter$/, /(^|_)adapter_(pct|percent|content)$/, /(^|_)percent_adapter$/],
+    retained: [/(^|_)retained$/, /(^|_)read_retention$/, /(^|_)retained_(pct|percent)$/, /(^|_)passed_filter_percent$/, /(^|_)pct_surviving_(reads|bases)$/, /(^|_)reads_after_filter_percent$/]
   };
 
   const defaultThresholds = Object.freeze({
@@ -40,17 +40,26 @@
   }
 
   function numeric(value) {
-    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "number" && Number.isFinite(value)) return { value, explicitPercent: false };
     if (typeof value !== "string") return undefined;
-    const clean = value.trim().replace(/%/g, "").replace(/\s/g, "");
+    const trimmed = value.trim();
+    if (!trimmed || /^(na|n\/a|null|nan|none|-|\.)$/i.test(trimmed)) return undefined;
+    const explicitPercent = trimmed.includes("%");
+    const clean = trimmed.replace(/%/g, "").replace(/\s/g, "");
+    if (!clean) return undefined;
     const decimal = clean.includes(",") && !clean.includes(".") ? clean.replace(",", ".") : clean.replace(/,/g, "");
     const parsed = Number(decimal);
-    return Number.isFinite(parsed) ? parsed : undefined;
+    return Number.isFinite(parsed) ? { value: parsed, explicitPercent } : undefined;
   }
 
-  function percentage(value) {
-    if (value === undefined) return undefined;
-    return value > 0 && value < 1 ? value * 100 : value;
+  function percentage(parsed, options) {
+    if (!parsed) return undefined;
+    if (parsed.explicitPercent) return parsed.value;
+    if (options && options.source === "multiqc-delimited") return parsed.value;
+    if (options && options.source === "multiqc-json" && /(^|_)(after_filtering_q30_rate|after_filtering_gc_content)$/.test(parsed.key)) {
+      return parsed.value * 100;
+    }
+    return parsed.value;
   }
 
   function flatten(record, prefix, depth) {
@@ -68,18 +77,23 @@
     return result;
   }
 
-  function metricValue(flat, aliases) {
-    for (const [key, value] of Object.entries(flat)) {
-      const cleanKey = normalizedKey(key);
-      if (aliases.some((alias) => alias.test(cleanKey))) {
+  function metricValue(flat, aliases, options) {
+    for (const alias of aliases) {
+      for (const [key, value] of Object.entries(flat)) {
+        const cleanKey = normalizedKey(key);
+        if (!alias.test(cleanKey)) continue;
         const parsed = numeric(value);
-        if (parsed !== undefined) return parsed;
+        if (!parsed) continue;
+        if (options && options.kind === "reads" && options.source === "multiqc-delimited" && /^(fastp|fastqc)_/.test(cleanKey)) {
+          return { value: Math.round(parsed.value * 1000000), explicitPercent: false, key: cleanKey };
+        }
+        return Object.assign({}, parsed, { key: cleanKey });
       }
     }
     return undefined;
   }
 
-  function normalizeRecord(record, sampleHint) {
+  function normalizeRecord(record, sampleHint, options) {
     const flat = flatten(record);
     const sampleEntry = Object.entries(flat).find(([key]) => /(^|_)(sample|sample_name|name|file|filename)$/.test(normalizedKey(key)));
     const rawSample = sampleEntry && sampleEntry[1];
@@ -90,18 +104,40 @@
 
     const result = {
       sample,
-      reads: metricValue(flat, metricAliases.reads),
-      q30: percentage(metricValue(flat, metricAliases.q30)),
-      gc: percentage(metricValue(flat, metricAliases.gc)),
-      duplication: percentage(metricValue(flat, metricAliases.duplication)),
-      adapter: percentage(metricValue(flat, metricAliases.adapter)),
-      retained: percentage(metricValue(flat, metricAliases.retained))
+      reads: (metricValue(flat, metricAliases.reads, { kind: "reads", source: options && options.source }) || {}).value,
+      q30: percentage(metricValue(flat, metricAliases.q30), options),
+      gc: percentage(metricValue(flat, metricAliases.gc), options),
+      duplication: percentage(metricValue(flat, metricAliases.duplication), options),
+      adapter: percentage(metricValue(flat, metricAliases.adapter), options),
+      retained: percentage(metricValue(flat, metricAliases.retained), options)
     };
     const available = Object.entries(result).filter(([key, value]) => key !== "sample" && value !== undefined).length;
     return available ? result : null;
   }
 
+  function recordsFromMultiQcJson(value) {
+    const modules = value && value.report_general_stats_data;
+    if (!modules || Array.isArray(modules) || typeof modules !== "object") return null;
+    const merged = new Map();
+    Object.values(modules).forEach((moduleData) => {
+      if (!moduleData || Array.isArray(moduleData) || typeof moduleData !== "object") return;
+      Object.entries(moduleData).forEach(([sample, metrics]) => {
+        if (!metrics || Array.isArray(metrics) || typeof metrics !== "object") return;
+        const normalized = normalizeRecord(metrics, sample, { source: "multiqc-json" });
+        if (!normalized) return;
+        const existing = merged.get(sample) || { sample };
+        Object.entries(normalized).forEach(([key, metric]) => {
+          if (key !== "sample" && metric !== undefined && existing[key] === undefined) existing[key] = metric;
+        });
+        merged.set(sample, existing);
+      });
+    });
+    return Array.from(merged.values());
+  }
+
   function recordsFromJson(value) {
+    const multiQcRecords = recordsFromMultiQcJson(value);
+    if (multiQcRecords) return multiQcRecords;
     const candidates = [];
     const visit = (node, depth) => {
       const level = depth || 0;
@@ -171,7 +207,7 @@
     return lines.slice(1).map((line) => {
       const values = splitRow(line, delimiter);
       const record = Object.fromEntries(headers.map((header, index) => [header, values[index] || ""]));
-      return normalizeRecord(record);
+      return normalizeRecord(record, undefined, { source: "multiqc-delimited" });
     }).filter(Boolean);
   }
 
@@ -189,7 +225,12 @@
       samples = recordsFromDelimited(trimmed);
     }
     if (!samples.length) {
-      throw new Error(copy("No samples or QC metrics were found. Use MultiQC JSON or a TSV/CSV file with sample, reads, q30, gc, duplication, adapter and retained columns.", "Numune ve QC metrikleri bulunamadı. MultiQC JSON ya da sample, reads, q30, gc, duplication, adapter, retained sütunlu TSV/CSV kullanın."));
+      throw new Error(copy("No sample had at least two recognized QC metrics. Use MultiQC 1.35 multiqc_data.json, multiqc_general_stats.txt, or a documented TSV/CSV table.", "Hiçbir numunede en az iki tanınan QC metriği yok. MultiQC 1.35 multiqc_data.json, multiqc_general_stats.txt veya belgelenmiş bir TSV/CSV tablosu kullanın."));
+    }
+    const incomplete = samples.filter((sample) => [sample.reads, sample.q30, sample.gc, sample.duplication, sample.adapter, sample.retained].filter((metric) => metric !== undefined).length < 2);
+    if (incomplete.length) {
+      const names = incomplete.slice(0, 5).map((sample) => sample.sample).join(", ");
+      throw new Error(copy(`Decision stopped: fewer than two recognized metrics for ${names}. Missing values are not treated as zero.`, `Karar durduruldu: ${names} için ikiden az tanınan metrik var. Eksik değerler sıfır sayılmaz.`));
     }
     return samples.slice(0, 500);
   }
@@ -278,7 +319,7 @@
     return { counts, overall, actions, risks };
   }
 
-  const api = { version: "1.1.0-beta", demoSamples, defaultThresholds, resolveThresholds, parseQcFile, evaluateSamples, summarize };
+  const api = { version: "1.1.1-beta", demoSamples, defaultThresholds, resolveThresholds, parseQcFile, evaluateSamples, summarize };
   root.GenomQCCore = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);

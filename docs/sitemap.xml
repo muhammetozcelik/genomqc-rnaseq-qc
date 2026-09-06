@@ -2,6 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://genomqc.pages.dev/</loc></url>
   <url><loc>https://genomqc.pages.dev/pro</loc></url>
+  <url><loc>https://genomqc.pages.dev/compatibility</loc></url>
+  <url><loc>https://genomqc.pages.dev/product-demo</loc></url>
   <url><loc>https://genomqc.pages.dev/demo/</loc></url>
   <url><loc>https://genomqc.pages.dev/multiqc-rnaseq-qc-decisions</loc></url>
   <url><loc>https://genomqc.pages.dev/privacy</loc></url>

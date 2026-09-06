@@ -1,0 +1,3 @@
+Sample	fastp-pct_duplication	fastp-after_filtering_q30_rate	fastp-after_filtering_q30_bases	fastp-filtering_result_passed_filter_reads	fastp-after_filtering_gc_content	fastp-pct_surviving_reads	fastp-pct_surviving_bases	fastp-pct_adapter	fastqc-percent_duplicates	fastqc-percent_gc	fastqc-avg_sequence_length	fastqc-median_sequence_length	fastqc-percent_fails	fastqc-total_sequences
+SRR1067503_1									13.158357833208953	44.0	36.0	36	8.333333333333332	30.680979999999998
+smalltest_S10	30.703000000000003	94.1898	1622.286535	16.034314	46.7941	95.64762325619795	94.6974696558957	0.8814870772653499						
