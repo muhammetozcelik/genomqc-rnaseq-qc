@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/muhammetozcelik/genomqc-rnaseq-qc/actions/workflows/ci.yml/badge.svg)](https://github.com/muhammetozcelik/genomqc-rnaseq-qc/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/badge/release-v0.1.0-2f855a.svg)](CHANGELOG.md)
+[![Release](https://img.shields.io/badge/release-v1.1.0--beta-2f855a.svg)](https://github.com/muhammetozcelik/genomqc-rnaseq-qc/releases/tag/v1.1.0)
 [**Open the GenomQC Decision Report →**](https://genomqc.pages.dev/)
 · [View the example MultiQC report](https://genomqc.pages.dev/demo/)
 · [Read the practical RNA-seq QC decision guide](https://genomqc.pages.dev/multiqc-rnaseq-qc-decisions)
