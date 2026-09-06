@@ -35,6 +35,35 @@
     "Herkese açık web sitesi Cloudflare Pages üzerinde barındırılır. Cloudflare, kendi gizlilik koşulları kapsamında IP adresi, tarayıcı ayrıntıları ve erişim kayıtları gibi olağan teknik bilgileri işleyebilir. GenomQC şu anda siteye üçüncü taraf reklam veya davranışsal analiz eklemez."
   );
 
+  Object.entries({
+    "ILLUSTRATIVE DATASET": "ÖRNEK VERİ SETİ",
+    "Generated in this browser": "Bu tarayıcıda oluşturuldu",
+    "REVIEW GATE": "İNCELEME KAPISI",
+    "Hold before downstream analysis": "Aşağı akış analizinden önce bekletin",
+    "One or more samples cross a FAIL boundary and require qualified review.": "Bir veya daha fazla örnek FAIL sınırını aşıyor ve yetkin inceleme gerektiriyor.",
+    "metric coverage": "metrik kapsamı",
+    "sample in review queue": "inceleme kuyruğundaki örnek",
+    "DECISION TRACE": "KARAR İZİ",
+    "Samples requiring attention": "Dikkat gerektiren örnekler",
+    "Every flag stays connected to its observed value, decision and recommended next action.": "Her işaret, gözlenen değerine, kararına ve önerilen sonraki eyleme bağlı kalır.",
+    "DECISION POLICY · DEFAULT RNA-SEQ PROFILE": "KARAR POLİTİKASI · VARSAYILAN RNA-SEQ PROFİLİ",
+    "Visible rules. No black box.": "Görünür kurallar. Kara kutu yok.",
+    "These screening thresholds are transparent starting points. Validate them against the assay, organism, library preparation, platform and laboratory SOP.": "Bu tarama eşikleri şeffaf başlangıç noktalarıdır. Bunları analiz, organizma, kütüphane hazırlığı, platform ve laboratuvar SOP'sine göre doğrulayın.",
+    "MAKE IT YOUR LAB'S REPORT": "LABORATUVARINIZIN RAPORUNA DÖNÜŞTÜRÜN",
+    "Replace generic thresholds with your own decision profile.": "Genel eşikleri kendi karar profilinizle değiştirin.",
+    "GenomQC Pro adds reusable thresholds, lab identity and structured exports—without uploading the QC file.": "GenomQC Pro, QC dosyasını yüklemeden yeniden kullanılabilir eşikler, laboratuvar kimliği ve yapılandırılmış dışa aktarımlar ekler.",
+    "See Pro workflow": "Pro iş akışını görün"
+    ,"LAB SETUP · DONE WITH YOU": "LAB KURULUMU · BİRLİKTE YAPILIR"
+    ,"· one-time technical setup": "· tek seferlik teknik kurulum"
+    ,"GenomQC Pro Founder Lab License included": "GenomQC Pro Kurucu Laboratuvar Lisansı dahil"
+    ,"One custom profile built from your documented SOP": "Belgelenmiş SOP'nizden oluşturulan bir özel profil"
+    ,"Lab identity, export check and 7-day setup support": "Laboratuvar kimliği, dışa aktarım kontrolü ve 7 günlük kurulum desteği"
+    ,"Request lab setup": "Laboratuvar kurulumu isteyin"
+    ,"Technical configuration only. Your qualified team supplies and approves the scientific thresholds.": "Yalnızca teknik yapılandırmadır. Bilimsel eşikleri yetkin ekibiniz sağlar ve onaylar."
+    ,"Start with a working lab profile, not a blank settings screen.": "Boş bir ayar ekranıyla değil, çalışan bir laboratuvar profiliyle başlayın."
+    ,"one-time technical setup": "tek seferlik teknik kurulum"
+  }).forEach(([english, turkish]) => tr.set(english, turkish));
+
   const originalText = new WeakMap();
   const originalAttributes = new WeakMap();
   let currentLanguage = "en";
@@ -128,4 +157,3 @@
   try { preferred = localStorage.getItem(storageKey) || "en"; } catch (error) { /* Storage may be disabled. */ }
   apply(preferred, false);
 })();
-

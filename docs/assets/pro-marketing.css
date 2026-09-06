@@ -58,11 +58,19 @@ h1 em { color:var(--orange); font-weight:500; }
 .license-card h2 { margin:12px 0; font:500 clamp(50px,6vw,78px)/1 Georgia,serif; }.license-card h2 span { font:700 13px/1 ui-sans-serif,system-ui; }
 .license-card p { line-height:1.6; }.license-card ul { margin:0; padding-left:20px; line-height:1.9; font-size:13px; }
 .license-card > div:last-child { display:grid; gap:14px; }.license-card small { line-height:1.5; }
+.setup-offer { margin:0 clamp(18px,5vw,72px) clamp(70px,9vw,125px); padding:clamp(30px,5vw,58px); display:grid; grid-template-columns:1.1fr .85fr .65fr; gap:55px; align-items:center; color:white; background:var(--ink); border:1px solid var(--ink); }
+.setup-offer .kicker { color:#63d9a1; }
+.setup-offer h2 { margin:12px 0 0; font:500 clamp(34px,4vw,56px)/1.02 Georgia,serif; letter-spacing:-.04em; }
+.setup-offer ul { margin:0; padding-left:20px; color:#c4ced3; font-size:13px; line-height:1.9; }
+.setup-price { display:grid; gap:9px; }
+.setup-price > strong { font:500 44px/1 Georgia,serif; }
+.setup-price > span { margin-bottom:10px; color:#9fb0b8; font-size:12px; }
+.setup-price small { color:#9fb0b8; font-size:11px; line-height:1.5; }
 .faq { background:#e7e2d6; }
 .faq details { max-width:980px; padding:22px 0; border-top:1px solid #9d9b94; }
 .faq details:last-child { border-bottom:1px solid #9d9b94; }
 .faq summary { cursor:pointer; font-size:17px; font-weight:800; }.faq details p { max-width:820px; margin:15px 0 0; color:#4c5d66; line-height:1.7; }
 footer { padding:38px clamp(18px,5vw,72px); display:flex; align-items:flex-start; justify-content:space-between; gap:25px; color:white; background:var(--ink); }
 footer div { display:flex; gap:16px; flex-wrap:wrap; } footer span,footer a { color:#9fb0b8; font-size:12px; text-decoration:none; }
-@media(max-width:980px){.pro-hero{grid-template-columns:1fr}.product-window{max-width:720px}.feature-grid{grid-template-columns:1fr 1fr}.workflow,.license-card{grid-template-columns:1fr}.license-card{gap:25px}}
+@media(max-width:980px){.pro-hero{grid-template-columns:1fr}.product-window{max-width:720px}.feature-grid{grid-template-columns:1fr 1fr}.workflow,.license-card,.setup-offer{grid-template-columns:1fr}.license-card,.setup-offer{gap:25px}}
 @media(max-width:660px){nav a:not(.nav-button){display:none}.pro-hero{padding-top:70px}.product-window{transform:none;box-shadow:7px 7px 0 var(--blue)}.window-body{grid-template-columns:1fr}.feature-grid{grid-template-columns:1fr}.workflow{gap:35px}.workflow li{grid-template-columns:90px 1fr}footer{flex-direction:column}}

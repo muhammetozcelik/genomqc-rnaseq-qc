@@ -11,11 +11,20 @@
     dropZone: document.getElementById("drop-zone"),
     error: document.getElementById("error-message"),
     source: document.getElementById("source-label"),
+    datasetKind: document.getElementById("dataset-kind"),
+    generated: document.getElementById("generated-label"),
     overall: document.getElementById("overall-status"),
     metrics: document.getElementById("metric-grid"),
     findings: document.getElementById("findings-list"),
     actions: document.getElementById("actions-list"),
     table: document.getElementById("sample-table"),
+    gate: document.getElementById("decision-gate"),
+    gateTitle: document.getElementById("gate-title"),
+    gateCopy: document.getElementById("gate-copy"),
+    coverage: document.getElementById("coverage-value"),
+    queueCount: document.getElementById("queue-value"),
+    reviewQueue: document.getElementById("review-queue"),
+    thresholds: document.getElementById("threshold-grid"),
     download: document.getElementById("download-json"),
     print: document.getElementById("print-report")
   };
@@ -55,6 +64,69 @@
     values.forEach((item) => container.appendChild(createElement("li", "", item)));
   }
 
+  function isDemoSource(sourceName) {
+    return /illustrative|demo kohortu|demo cohort/i.test(sourceName);
+  }
+
+  function metricCoverage(samples) {
+    const metricNames = ["reads", "q30", "gc", "duplication", "adapter", "retained"];
+    const available = samples.reduce((total, sample) => total + metricNames.filter((name) => sample[name] !== undefined).length, 0);
+    return samples.length ? Math.round((available / (samples.length * metricNames.length)) * 100) : 0;
+  }
+
+  function renderGate(summary, evaluated) {
+    const queue = evaluated.filter((sample) => sample.status !== "PASS");
+    const messages = {
+      PASS: [copy("Clear at the active thresholds", "Etkin eşiklerde engel yok"), copy("No sample crosses a WARN or FAIL boundary. Confirm the result against the experimental design before downstream use.", "Hiçbir örnek WARN veya FAIL sınırını aşmıyor. Aşağı akış kullanımından önce sonucu deney tasarımıyla doğrulayın.")],
+      WARN: [copy("Review before downstream analysis", "Aşağı akış analizinden önce inceleyin"), copy("At least one sample crosses a WARN boundary. Review the flagged evidence before accepting the cohort.", "En az bir örnek WARN sınırını aşıyor. Kohortu kabul etmeden önce işaretli kanıtları inceleyin.")],
+      FAIL: [copy("Hold before downstream analysis", "Aşağı akış analizinden önce bekletin"), copy("One or more samples cross a FAIL boundary and require qualified review.", "Bir veya daha fazla örnek FAIL sınırını aşıyor ve yetkin inceleme gerektiriyor.")]
+    };
+    elements.gate.className = `decision-gate is-${summary.overall.toLowerCase()}`;
+    elements.gateTitle.textContent = messages[summary.overall][0];
+    elements.gateCopy.textContent = messages[summary.overall][1];
+    elements.coverage.textContent = `${metricCoverage(evaluated)}%`;
+    elements.queueCount.textContent = String(queue.length);
+  }
+
+  function renderReviewQueue(evaluated) {
+    clear(elements.reviewQueue);
+    const flagged = evaluated.filter((sample) => sample.status !== "PASS");
+    if (!flagged.length) {
+      elements.reviewQueue.appendChild(createElement("p", "review-empty", copy("No samples are in the review queue at the active thresholds.", "Etkin eşiklerde inceleme kuyruğunda örnek yok.")));
+      return;
+    }
+    flagged.forEach((sample) => {
+      const card = createElement("article", `review-item is-${sample.status.toLowerCase()}`);
+      const head = createElement("div", "review-item-head");
+      head.append(createElement("h4", "", sample.sample), statusBadge(sample.status));
+      const evidenceTitle = createElement("h5", "", copy("Evidence", "Kanıt"));
+      const evidence = document.createElement("ul");
+      sample.findings.forEach((finding) => evidence.appendChild(createElement("li", "", finding)));
+      const action = createElement("p", "review-action");
+      action.append(createElement("strong", "", `${copy("Next action", "Sonraki eylem")}: `), document.createTextNode(sample.actions[0]));
+      card.append(head, evidenceTitle, evidence, action);
+      elements.reviewQueue.appendChild(card);
+    });
+  }
+
+  function renderThresholds() {
+    const threshold = core.defaultThresholds;
+    const rules = [
+      ["Q30", `< ${threshold.q30WarnMin}% WARN · < ${threshold.q30FailMin}% FAIL`],
+      [copy("Read retention", "Okuma tutulumu"), `< ${threshold.retainedWarnMin}% WARN · < ${threshold.retainedFailMin}% FAIL`],
+      [copy("Duplication", "Duplikasyon"), `> ${threshold.duplicationWarnMax}% WARN · > ${threshold.duplicationFailMax}% FAIL`],
+      [copy("Adapter content", "Adaptör içeriği"), `> ${threshold.adapterWarnMax}% WARN · > ${threshold.adapterFailMax}% FAIL`],
+      [copy("Read depth", "Okuma derinliği"), `< ${formatNumber(threshold.readsWarnMin)} WARN · < ${formatNumber(threshold.readsFailMin)} FAIL`],
+      [copy("Cohort GC deviation", "Kohort GC sapması"), `> ${threshold.gcDeviationWarnMax} pp WARN · > ${threshold.gcDeviationFailMax} pp FAIL`]
+    ];
+    clear(elements.thresholds);
+    rules.forEach(([label, value]) => {
+      const wrapper = createElement("div", "threshold-rule");
+      wrapper.append(createElement("dt", "", label), createElement("dd", "", value));
+      elements.thresholds.appendChild(wrapper);
+    });
+  }
+
   function renderReport(samples, sourceName) {
     currentInput = { samples, sourceName };
     const evaluated = core.evaluateSamples(samples);
@@ -63,11 +135,18 @@
       generatedAt: new Date().toISOString(),
       source: sourceName,
       engineVersion: core.version,
+      decisionProfile: {
+        id: "genomqc-rnaseq-default",
+        name: "Default RNA-seq screening profile",
+        thresholds: core.defaultThresholds
+      },
       summary,
       samples: evaluated
     };
 
     elements.source.textContent = `${copy("Source", "Kaynak")}: ${sourceName}`;
+    elements.datasetKind.textContent = isDemoSource(sourceName) ? copy("ILLUSTRATIVE DATASET", "ÖRNEK VERİ SETİ") : copy("LOCAL FILE", "YEREL DOSYA");
+    elements.generated.textContent = `${copy("Generated", "Oluşturuldu")}: ${new Intl.DateTimeFormat(language() === "tr" ? "tr-TR" : "en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date())}`;
     elements.overall.textContent = summary.overall;
     elements.overall.className = `status-badge status-${summary.overall.toLowerCase()}`;
 
@@ -85,6 +164,9 @@
 
     renderList(elements.findings, summary.risks, copy("No notable cohort risk was detected at the defined thresholds.", "Tanımlı eşiklerde belirgin bir kohort riski saptanmadı."));
     renderList(elements.actions, summary.actions, copy("Proceed to downstream analysis together with qualified review.", "Uzman incelemesiyle birlikte aşağı akış analizine geçin."));
+    renderGate(summary, evaluated);
+    renderReviewQueue(evaluated);
+    renderThresholds();
 
     clear(elements.table);
     evaluated.forEach((sample) => {
@@ -155,7 +237,7 @@
   elements.fileInput.addEventListener("change", (event) => handleFile(event.target.files && event.target.files[0]));
   elements.loadDemo.addEventListener("click", () => {
     hideError();
-    renderReport(core.demoSamples, copy("GenomQC demo cohort", "GenomQC demo kohortu"));
+    renderReport(core.demoSamples, copy("Illustrative bulk RNA-seq cohort · 5 samples", "Örnek bulk RNA-seq kohortu · 5 örnek"));
     document.getElementById("report").scrollIntoView({ behavior: "smooth", block: "start" });
   });
   elements.download.addEventListener("click", downloadReport);
@@ -175,11 +257,11 @@
   });
   elements.dropZone.addEventListener("drop", (event) => handleFile(event.dataTransfer && event.dataTransfer.files[0]));
 
-  renderReport(core.demoSamples, copy("GenomQC demo cohort", "GenomQC demo kohortu"));
+  renderReport(core.demoSamples, copy("Illustrative bulk RNA-seq cohort · 5 samples", "Örnek bulk RNA-seq kohortu · 5 örnek"));
   window.addEventListener("genomqc:languagechange", () => {
     if (!currentInput) return;
-    const demo = currentInput.sourceName === "GenomQC demo cohort" || currentInput.sourceName === "GenomQC demo kohortu";
-    renderReport(currentInput.samples, demo ? copy("GenomQC demo cohort", "GenomQC demo kohortu") : currentInput.sourceName);
+    const demo = isDemoSource(currentInput.sourceName) || /örnek bulk/i.test(currentInput.sourceName);
+    renderReport(currentInput.samples, demo ? copy("Illustrative bulk RNA-seq cohort · 5 samples", "Örnek bulk RNA-seq kohortu · 5 örnek") : currentInput.sourceName);
   });
   window.GenomQCApp = { analyzeText };
 
@@ -232,5 +314,4 @@
 
   registerWebMcp();
 })();
-
 
