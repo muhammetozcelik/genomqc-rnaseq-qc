@@ -31,6 +31,12 @@ MIT-licensed beta remains free; the Pro product and its Founder Lab License are
 described on the [product page](https://genomqc.pages.dev/pro).
 [Buy GenomQC Pro for 919 TRY through LyoVexa on Shopier](https://www.shopier.com/lyovexa/50580150).
 
+Teams that want a working configuration instead of self-service setup can
+request the 2,490 TRY one-time Lab Setup package. It includes the Pro license,
+one custom profile built from the team's documented SOP, lab identity setup,
+an export-compatibility check, and seven days of technical setup support.
+Scientific thresholds remain the responsibility of the qualified research team.
+
 GenomQC is a LyoVexa brand.
 
 ## What it produces
@@ -162,5 +168,4 @@ metadata in [CITATION.cff](CITATION.cff).
 This public repository is released under the [MIT License](LICENSE). The
 separately distributed GenomQC Pro product uses the commercial license included
 with that download.
-
 
