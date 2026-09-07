@@ -9,7 +9,7 @@
   <g transform="translate(76 545)" font-family="Arial">
     <rect width="650" height="360" rx="10" fill="#fffdfa"/>
     <text x="30" y="48" font-family="Consolas,monospace" font-size="15" font-weight="700" letter-spacing="2" fill="#145ee8">FOUNDER LAB PROGRAM</text>
-    <text x="30" y="118" font-family="Georgia,serif" font-size="56" font-weight="700" fill="#091923">919 TRY</text>
+    <text x="30" y="118" font-family="Georgia,serif" font-size="56" font-weight="700" fill="#091923">$19 USD</text>
     <text x="30" y="155" font-size="18" fill="#52606a">one-time · up to 5 users</text>
     <path d="M30 178h590" stroke="#d4d0c7"/>
     <g font-size="20" fill="#091923"><text x="30" y="218">✓ Custom thresholds and reusable profiles</text><text x="30" y="260">✓ Branded PDF, JSON and CSV output</text><text x="30" y="302">✓ English / Turkish reports</text><text x="30" y="344">✓ All v1.x updates</text></g>
@@ -24,6 +24,6 @@
   <rect x="76" y="965" width="470" height="82" rx="5" fill="#145ee8"/>
   <text x="106" y="1000" font-family="Consolas,monospace" font-size="15" font-weight="700" letter-spacing="2" fill="#bcd3ff">VIEW DETAILS &amp; TRY THE BETA</text>
   <text x="106" y="1030" font-family="Arial" font-size="22" font-weight="800" fill="#fff">genomqc.pages.dev/pro</text>
-  <text x="76" y="1115" font-family="Arial" font-size="18" fill="#9ba9b1">Research use only · Shopier checkout · A LyoVexa brand</text>
+  <text x="76" y="1115" font-family="Arial" font-size="18" fill="#9ba9b1">Research use only · Lemon Squeezy checkout · A LyoVexa brand</text>
 </svg>
 

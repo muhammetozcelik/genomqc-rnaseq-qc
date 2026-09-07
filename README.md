@@ -36,10 +36,10 @@ configurable WARN/FAIL thresholds, reusable decision profiles, lab-branded PDF
 reports, English/Turkish findings, and structured JSON/CSV exports. The public
 MIT-licensed beta remains free; the Pro product and its Founder Lab License are
 described on the [product page](https://genomqc.pages.dev/pro).
-[Buy GenomQC Pro for 919 TRY through LyoVexa on Shopier](https://www.shopier.com/lyovexa/50580150).
+[Buy GenomQC Pro for $19 through LyoVexa on Lemon Squeezy](https://genomqc.lemonsqueezy.com/checkout/buy/10265eef-46a7-4363-9432-9940aac938c7).
 
 Teams that want a working configuration instead of self-service setup can
-request the 2,490 TRY one-time Lab Setup package. It includes the Pro license,
+request the $49 one-time Lab Setup package. It includes the Pro license,
 one custom profile built from the team's documented SOP, lab identity setup,
 an export-compatibility check, and seven days of technical setup support.
 Scientific thresholds remain the responsibility of the qualified research team.
