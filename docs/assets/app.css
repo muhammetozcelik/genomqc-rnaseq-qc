@@ -12,8 +12,8 @@
   --red: #e8514a;
   --white: #fffdf8;
   --radius: 3px;
-  --font-body: "Segoe UI Variable Text", "Segoe UI", Arial, sans-serif;
-  --font-display: "Segoe UI Variable Display", "Segoe UI", Arial, sans-serif;
+  --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
   --font-mono: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
   color-scheme: light;
 }
@@ -27,8 +27,6 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -145,12 +143,12 @@ h1 {
   margin: 24px 0 26px;
   font-family: var(--font-display);
   font-size: clamp(54px, 7vw, 105px);
-  line-height: .94;
-  letter-spacing: -.045em;
-  font-weight: 720;
+  line-height: .91;
+  letter-spacing: -.065em;
+  font-weight: 500;
 }
 
-h1 em { color: var(--orange); font-style: normal; font-weight: 720; }
+h1 em { color: var(--orange); font-weight: 500; }
 
 .lede {
   max-width: 650px;
@@ -274,8 +272,8 @@ h1 em { color: var(--orange); font-style: normal; font-weight: 720; }
   font-family: var(--font-display);
   font-size: clamp(38px, 5vw, 68px);
   line-height: 1;
-  letter-spacing: -.032em;
-  font-weight: 680;
+  letter-spacing: -.045em;
+  font-weight: 500;
 }
 
 .report-provenance { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 13px; margin-top: 10px; }
@@ -311,7 +309,7 @@ h1 em { color: var(--orange); font-style: normal; font-weight: 720; }
 
 .metric-grid { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #40505a; }
 .metric { padding: 10px 20px; background: var(--ink); }
-.metric strong { display: block; font: 680 clamp(27px, 3vw, 44px)/1 var(--font-display); letter-spacing: -.025em; }
+.metric strong { display: block; font: 500 clamp(27px, 3vw, 44px)/1 var(--font-display); }
 .metric span { display: block; margin-top: 7px; color: #94a3ac; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
 
 .decision-gate {
@@ -334,7 +332,7 @@ h1 em { color: var(--orange); font-style: normal; font-weight: 720; }
 .decision-gate > p { margin: 0; color: #c8d0d4; line-height: 1.55; }
 .gate-meta { display: flex; justify-content: flex-end; gap: 24px; }
 .gate-meta span { max-width: 120px; color: #8999a3; font-size: 11px; line-height: 1.45; text-transform: uppercase; letter-spacing: .06em; }
-.gate-meta b { display: block; margin-bottom: 4px; color: white; font: 680 27px/1 var(--font-display); letter-spacing: -.015em; }
+.gate-meta b { display: block; margin-bottom: 4px; color: white; font: 500 27px/1 var(--font-display); letter-spacing: 0; }
 
 .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 30px; }
 .insight-card { min-height: 240px; padding: 28px; border: 1px solid #40505a; }
@@ -354,7 +352,7 @@ tbody tr:hover { background: rgba(255,255,255,.035); }
 
 .review-queue-section { margin-top: 48px; }
 .subsection-heading { display: flex; justify-content: space-between; gap: 30px; align-items: end; }
-.subsection-heading h3, .policy-panel h3, .report-upgrade h3 { margin: 8px 0 0; font: 680 30px/1.12 var(--font-display); letter-spacing: -.02em; }
+.subsection-heading h3, .policy-panel h3, .report-upgrade h3 { margin: 8px 0 0; font: 500 30px/1.1 var(--font-display); letter-spacing: -.025em; }
 .subsection-heading > p { max-width: 560px; margin: 0; color: #9eabb2; font-size: 14px; line-height: 1.6; }
 .review-queue { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
 .review-item { padding: 22px; border: 1px solid #40505a; background: #0d202c; }
@@ -423,7 +421,7 @@ tbody tr:hover { background: rgba(255,255,255,.035); }
 .case-strip h3 { margin: 8px 0 0; font-size: 22px; }
 .case-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .case-stats span { color: var(--ink-soft); font-size: 12px; }
-.case-stats strong { display: block; color: var(--ink); font: 680 26px/1.2 var(--font-display); letter-spacing: -.02em; }
+.case-stats strong { display: block; color: var(--ink); font: 500 26px/1.2 var(--font-display); }
 .text-link { font-size: 13px; font-weight: 800; color: var(--blue); }
 
 .pilot-section {
@@ -435,7 +433,7 @@ tbody tr:hover { background: rgba(255,255,255,.035); }
   color: white;
 }
 .pilot-copy .section-index { color: var(--cyan); }
-.pilot-copy h2 { margin: 12px 0 22px; font: 680 clamp(40px, 5vw, 68px)/1 var(--font-display); letter-spacing: -.032em; }
+.pilot-copy h2 { margin: 12px 0 22px; font: 500 clamp(40px, 5vw, 68px)/.98 var(--font-display); letter-spacing: -.045em; }
 .pilot-copy > p:last-child { max-width: 590px; margin: 0; color: #b8c3c9; line-height: 1.7; }
 .pilot-panel { align-self: center; padding: clamp(24px, 4vw, 38px); border: 1px solid #42545f; background: #10232f; }
 .pilot-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #42545f; }
@@ -454,14 +452,14 @@ tbody tr:hover { background: rgba(255,255,255,.035); }
   background: var(--orange);
 }
 .pricing-intro .section-index { color: var(--ink); }
-.pricing-intro h2 { margin: 12px 0 22px; font: 680 clamp(40px, 5vw, 68px)/1 var(--font-display); letter-spacing: -.032em; }
+.pricing-intro h2 { margin: 12px 0 22px; font: 500 clamp(40px, 5vw, 68px)/.98 var(--font-display); letter-spacing: -.045em; }
 .pricing-intro > p:last-child { max-width: 560px; line-height: 1.7; }
 .pricing-grid { display: grid; grid-template-columns: 1fr 1.12fr; gap: 16px; align-items: stretch; }
 .price-card { position: relative; padding: 30px; background: var(--paper); border: 1px solid var(--ink); }
 .featured-price { background: var(--white); box-shadow: 8px 8px 0 var(--ink); }
 .soon-label { position: absolute; top: 0; right: 0; padding: 7px 9px; background: var(--ink); color: white; font: 800 9px/1 ui-monospace, monospace; letter-spacing: .07em; }
 .price { min-height: 60px; margin: 18px 0 24px; }
-.price strong { font: 680 50px/1 var(--font-display); letter-spacing: -.025em; }
+.price strong { font: 500 50px/1 var(--font-display); }
 .price span { color: var(--ink-soft); font-size: 12px; }
 .price-card ul { min-height: 128px; margin: 0 0 24px; padding-left: 20px; line-height: 1.7; font-size: 14px; }
 .price-card small { display: block; margin-top: 13px; color: var(--ink-soft); line-height: 1.5; }
