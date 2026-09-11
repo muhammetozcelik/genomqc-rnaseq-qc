@@ -1,5 +1,3 @@
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="2" y="2" width="60" height="60" rx="12" fill="#0B1D27"/>
-  <rect x="49" y="10" width="7" height="7" rx="0.7" fill="#145EE8"/>
-  <text x="9" y="43" fill="#FFFDF8" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="800" letter-spacing="-2.4">GQ</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="GenomQC GQ logo">
+  <image width="128" height="128" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAM0lEQVR4nO3BMQEAAADCoPVPbQ0PoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4G8GgAABuQABAAA="/>
 </svg>
