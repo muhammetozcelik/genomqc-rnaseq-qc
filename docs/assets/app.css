@@ -1,1 +1,18 @@
-@import url('./app-v3.css?v=20260911-1');
+@import url('./app-v3.css?v=20260911-2');
+
+/* Temporary deployment marker: remove after live verification. */
+body::before {
+  content: "GENOMQC · NEW UI LIVE";
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 9999;
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: #101820;
+  color: #ffffff;
+  font: 700 10px/1.1 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: .08em;
+  box-shadow: 0 8px 24px rgba(16,24,32,.18);
+  pointer-events: none;
+}
