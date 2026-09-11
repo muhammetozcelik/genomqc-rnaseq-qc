@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GenomQC — Design Preview</title>
+  <style>
+    html,body{margin:0;width:100%;height:100%;background:#fbfaf7;overflow:hidden}
+    iframe{display:block;width:100%;height:100%;border:0;background:#fbfaf7}
+  </style>
+</head>
+<body>
+  <iframe id="preview" src="./" title="GenomQC redesign preview"></iframe>
+  <script>
+    const frame = document.getElementById('preview');
+    frame.addEventListener('load', () => {
+      try {
+        const doc = frame.contentDocument;
+        doc.querySelectorAll('link[rel="stylesheet"]').forEach((link) => { link.disabled = true; });
+        const css = doc.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = './assets/app-v3.css?v=20260911-1';
+        doc.head.appendChild(css);
+      } catch (error) {
+        console.error('Preview styling could not be applied', error);
+      }
+    });
+  </script>
+</body>
+</html>
