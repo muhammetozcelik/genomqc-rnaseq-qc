@@ -1,0 +1,166 @@
+/* Shared, restrained presentation for the public report and Pro pages. */
+.skip-link { position:fixed; top:12px; left:12px; z-index:100; padding:12px 18px; background:#fff; color:#091923; border:2px solid #145bea; transform:translateY(-180%); }
+.skip-link:focus { transform:none; }
+/* Shared readability pass: metadata may be quiet, never microscopic. */
+body { font-size:16px; }
+.site-header, .pro-nav { min-height:72px; }
+.site-header nav a, .pro-nav nav a { font-size:14px; }
+.eyebrow, .section-index, .card-kicker, .overall-label, .plan-name,
+.report-section .kicker, .pro-hero .kicker, .features .kicker, .workflow .kicker,
+.license-card .kicker, .setup-offer .kicker, .faq .kicker {
+  font-family:var(--font-body) !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  letter-spacing:.03em !important;
+  text-transform:none !important;
+}
+.eyebrow, .card-kicker, .section-index, .plan-name, .kicker { font-size:13px; }
+.report-provenance p, .metric span, .gate-meta span, .pilot-note, .case-stats span { font-size:13px; }
+.report-section table { font-size:14px; }
+.price-card ul, .feature-grid p, .pilot-steps small { font-size:15px; }
+.input-help { display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px 12px; font-size:13px; line-height:1.6; color:#52606a; margin:12px 0 0; }
+.input-help a { color:#145bea; text-underline-offset:3px; }
+.button:disabled { opacity:.6; cursor:wait; }
+.evidence-panel { margin:24px 0; border:1px solid #42545f; border-radius:12px; padding:18px 22px; color:#e5edf1; }
+.evidence-panel summary { cursor:pointer; font-size:15px; font-weight:500; line-height:1.6; }
+.evidence-panel > p { max-width:880px; font-size:14px; color:#c4d0d8; line-height:1.7; }
+.evidence-metrics { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:16px; margin:22px 0; }
+.evidence-metrics dt { font-size:14px; color:#c4d0d8; }
+.evidence-metrics dd { margin:6px 0 0; font-size:20px; font-variant-numeric:tabular-nums; }
+.evidence-metrics .is-partial dd,.evidence-missing { color:#f6d28b; }
+.sample-toolbar { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end; margin:32px 0 14px; }
+.sample-toolbar label { display:grid; gap:8px; font-size:14px; color:#c4d0d8; }
+.sample-toolbar input,.sample-toolbar select { min-height:44px; padding:10px 12px; background:#1c303d; border:1px solid #536977; border-radius:8px; color:#fff; font:400 16px/1.4 var(--font-body); }
+.sample-toolbar input { width:250px; max-width:100%; }
+.sample-toolbar input::placeholder { color:#b3c0c9; }
+.sample-toolbar select { min-width:165px; }
+.sample-toolbar p { margin:0 0 10px auto; font-size:14px; color:#b8c8d1; }
+.sample-toolbar input:focus-visible,.sample-toolbar select:focus-visible,.table-wrap:focus-visible,.evidence-panel summary:focus-visible { outline:3px solid #739bf0; outline-offset:4px; }
+.empty-result { text-align:center; padding:30px; }
+#sample-table td:first-child { max-width:240px; overflow-wrap:anywhere; }
+#sample-table td:nth-child(8) { white-space:nowrap; font-size:14px; }
+#sample-table td { font-variant-numeric:tabular-nums; }
+@media(max-width:700px) {
+  .evidence-metrics { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .sample-toolbar label { flex:1 1 150px; }
+  .sample-toolbar input,.sample-toolbar select { width:100%; min-width:0; }
+  .sample-toolbar p { width:100%; margin:0; }
+  .evidence-panel { padding:16px; }
+}
+
+/* Final type scale overrides are intentionally conservative and apply across breakpoints. */
+.trust-row span, .price-card ul, .feature-grid p, .pilot-steps small,
+.report-provenance p, .review-item ul, .review-action, .policy-intro > p:last-child,
+.case-stats span, footer span, footer a { font-size:14px; }
+.metric span, .gate-meta span, .pilot-note, .product-details-link { font-size:13px; }
+@media (max-width:700px) {
+  .site-header nav a, .pro-nav nav a { font-size:14px; }
+  .feature-grid p, .price-card ul, .pilot-steps small { font-size:15px; }
+}
+@media print {
+  .skip-link,.sample-toolbar { display:none !important; }
+  .evidence-panel { color:#091923; border-color:#aaa; break-inside:avoid; }
+  .evidence-panel > p,.evidence-metrics dt { color:#333; }
+  .evidence-metrics .is-partial dd,.evidence-missing { color:#755000; }
+  .table-wrap { overflow:visible; }
+  table { min-width:0; width:100%; }
+  th,td { white-space:normal; font-size:9pt; padding:6px; }
+}
+@media screen {
+  :root { --paper:#faf9f6; --white:#fff; --paper-deep:#eeefec; --line:#dedfdb; --blue:#145bea; --orange:#145bea; }
+  body { line-height:1.6; }
+  .site-header,.pro-nav { min-height:76px; height:auto; gap:32px; padding-block:16px; background:rgba(255,255,255,.96); color:var(--ink); border-bottom:1px solid var(--line); }
+  .site-header .brand,.pro-nav .brand { flex-shrink:0; color:var(--ink); letter-spacing:0; gap:12px; }
+  .brand-mark,.pro-nav .brand > span { border-radius:9px; }
+  .site-header .brand .brand-logo-frame,.pro-nav .brand .brand-logo-frame { position:relative; display:block; width:44px; height:44px; overflow:hidden; flex-shrink:0; border-radius:7px; margin:0; background:#091923; }
+  .brand-logo-frame .brand-logo { position:absolute; display:block; width:184%; height:184%; max-width:none; left:-42%; top:-42%; margin:0; }
+  .site-header .brand .brand-wordmark,.pro-nav .brand .brand-wordmark { display:block; width:auto; height:auto; margin:0; background:none; color:#263239; font-family:"Segoe UI",Arial,sans-serif; font-size:19px; line-height:1.3; font-weight:400; letter-spacing:.01em; }
+  .pro-nav .brand { gap:13px; }
+  .pro-nav .brand strong { margin-left:2px; color:#627077; font:500 12px/1.3 "Segoe UI",Arial,sans-serif; letter-spacing:.1em; }
+  .hero h1 em,.pro-hero h1 em { color:inherit; }
+  .pro-hero h1 { font-family:Georgia,"Times New Roman",serif; font-weight:400; line-height:1.08; letter-spacing:-.03em; }
+  .pro-hero h1 em { font-weight:400; font-style:italic; }
+  .card-topline h2,.method-grid h3,.feature-grid h3,.faq summary { font-weight:500; }
+  .eyebrow,.hero-copy .section-index,.method-section .section-index,.pricing-section .section-index,.pro-hero .kicker,.features .kicker { color:#657077; }
+  .site-header nav,.pro-nav nav { margin-left:auto; gap:24px; flex-wrap:wrap; }
+  .site-header nav a,.pro-nav nav a { font-size:14px; font-weight:600; color:#445362; }
+  .site-header .genomqc-language-switch,.pro-nav .genomqc-language-switch { margin-left:0; gap:8px; font-size:14px; }
+  .nav-github,.nav-button { border:1px solid var(--line); border-radius:8px; }
+  .hero,.pro-hero { min-height:auto; padding-block:88px; gap:clamp(36px,5vw,80px); background-image:none; }
+  .hero { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+  .hero h1 { font-size:clamp(52px,5.6vw,84px); line-height:1.04; letter-spacing:-.035em; }
+  .lede { font-size:19px; line-height:1.75; max-width:560px; }
+  .eyebrow,.card-kicker,.section-index,.plan-name,.kicker { letter-spacing:.06em; font-size:12px; font-weight:600; }
+  .trust-row { gap:12px 22px; margin-top:26px; }
+  .trust-row span { font-weight:500; font-size:14px; }
+  .hero-pilot-link { font-weight:600; margin-top:20px; }
+  .upload-card,.product-window { border:1px solid var(--line); border-radius:18px; box-shadow:0 12px 40px rgba(18,38,63,.06); transform:none; overflow:hidden; }
+  .card-topline h2 { font-size:22px; line-height:1.35; letter-spacing:-.015em; }
+  .drop-zone { min-height:220px; border-color:#bdc8d5; border-radius:12px; background:#f8fafc; }
+  .local-pill,.demo-pill { border-radius:6px; }
+  .button,.btn { border-radius:9px; box-shadow:none; min-height:46px; font-weight:600; letter-spacing:0; }
+  .button:hover,.btn:hover { box-shadow:none; }
+  .privacy-note { line-height:1.6; }
+  .method-section,.pricing-section,.pilot-section,.report-section,.features,.workflow,.faq { padding-block:80px; }
+  .method-grid { gap:24px; border:0; margin-top:36px; }
+  .method-grid article { padding:28px; min-height:220px; background:white; border:1px solid var(--line); border-radius:14px; }
+  .method-grid article:last-child { border-right:1px solid var(--line); }
+  .method-grid h3 { margin-top:28px; }
+  .case-strip { border-radius:14px; gap:28px; padding:28px; margin-top:32px; }
+  .pricing-section { background:#f0f1ee; grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr); gap:48px; }
+  .pricing-intro h2,.pilot-copy h2 { font-size:clamp(36px,4vw,54px); line-height:1.12; letter-spacing:-.025em; }
+  .price-card { border:1px solid var(--line); border-radius:14px; padding:28px; }
+  .featured-price { box-shadow:none; border-color:#aab7bd; }
+  .soon-label { position:static; display:inline-block; border-radius:4px; background:#edf0ef; color:#485d66; margin-bottom:16px; font-size:11px; }
+  .price strong { font-size:40px; }
+  .price-card small,.product-details-link { font-size:13px; }
+  .service-price { gap:24px; }
+  .pilot-panel,.policy-panel,.decision-gate,.insight-card,.review-item,.report-upgrade,.table-wrap { border-radius:12px; }
+  .pilot-panel { background:transparent; padding:28px; }
+  .pilot-steps { background:transparent; gap:18px; }
+  .pilot-steps > div { background:transparent; padding:8px; }
+  .pilot-note { font-size:13px; }
+  .report-section { background:#11232e; }
+  .disclaimer { background:#eef1f5; font-size:14px; gap:24px; }
+  footer { padding-block:32px; gap:28px; }
+  footer > div { flex-wrap:wrap; }
+  .feature-grid { gap:20px; border:0; }
+  .feature-grid article { background:white; border:1px solid var(--line); border-radius:14px; min-height:220px; }
+  .feature-grid h3 { margin-top:28px; letter-spacing:-.01em; }
+  .feature-grid p { font-size:16px; }
+  .license-card { background:#f0f1ee; border:1px solid var(--line); border-radius:16px; box-shadow:none; }
+  .setup-offer { border-radius:16px; }
+  .faq { background:#f0f1ee; }
+  a:focus-visible,button:focus-visible,summary:focus-visible { outline:3px solid #739bf0; outline-offset:4px; }
+  @media(min-width:1500px) {
+    .hero,.pro-hero,.method-section,.pricing-section,.pilot-section,.report-section,.features,.workflow,.faq { padding-inline:max(64px,calc((100vw - 1320px)/2)); }
+  }
+  @media(max-width:980px) {
+    .hero,.pricing-section { grid-template-columns:1fr; }
+    .hero,.pro-hero { padding-block:56px; }
+    .hero-copy { max-width:680px; }
+    .site-header,.pro-nav { gap:20px; flex-wrap:wrap; }
+    .site-header nav,.pro-nav nav { gap:16px; }
+    .method-grid { grid-template-columns:1fr; }
+  }
+  @media(max-width:700px) {
+    .site-header,.pro-nav { padding:14px 20px; gap:14px; }
+    .site-header nav,.pro-nav nav { order:3; width:100%; margin:0; gap:12px; }
+    .site-header nav a,.pro-nav nav a { font-size:14px; }
+    #report,#method,#pricing,#compatibility-check { scroll-margin-top:128px; }
+    .site-header nav a:not(.nav-github),.pro-nav nav a:not(.nav-button) { display:inline-flex; }
+    .site-header .genomqc-language-switch,.pro-nav .genomqc-language-switch { order:2; margin-left:auto; }
+    .nav-github,.nav-button { padding:5px 8px; }
+    .hero h1 { font-size:clamp(44px,11vw,68px); }
+    .upload-card { padding:22px; }
+    .method-section,.pricing-section,.pilot-section,.report-section,.features,.workflow,.faq { padding-block:52px; }
+    .method-grid article { padding:24px; }
+    .card-topline { gap:12px; }
+    .price-card { padding:24px; }
+    .pricing-section { gap:30px; }
+  }
+  @media(prefers-reduced-motion:reduce) {
+    html { scroll-behavior:auto; }
+    *,*::before,*::after { animation:none !important; transition:none !important; }
+  }
+}

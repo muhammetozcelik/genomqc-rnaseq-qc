@@ -3,6 +3,10 @@
 
   const storageKey = "genomqc-language";
   const tr = new Map(Object.entries({
+    "01 · Data input": "01 · Veri girişi", "02 · Decision report": "02 · Karar raporu", "03 · How it works": "03 · Nasıl çalışır", "04 · Real-report validation": "04 · Gerçek rapor doğrulaması", "05 · Access": "05 · Erişim", "Public beta": "Herkese açık beta", "Founder lab program": "Kurucu laboratuvar programı", "Pro · Founder lab license": "Pro · Kurucu laboratuvar lisansı",
+    "Skip to report": "Rapora geç", "Supported formats": "Desteklenen biçimler", "Up to 500 samples · No silent truncation": "En fazla 500 örnek · Sessiz kesilme yok",
+    "Evidence coverage": "Kanıt kapsamı", "Filter samples": "Örnekleri filtrele", "Find a sample": "Örnek ara", "Sample ID": "Örnek kimliği", "Show": "Göster", "All samples": "Tüm örnekler", "Needs review": "İnceleme gerekli", "Partial evidence": "Kısmi kanıt", "Evidence": "Kanıt", "Sample results, scroll horizontally for all columns": "Örnek sonuçları; tüm sütunlar için yatay kaydırın",
+    "PASS applies only to the available metrics at the active thresholds. It is not biological validation.": "PASS yalnızca mevcut metrikler ve etkin eşikler için geçerlidir. Biyolojik doğrulama değildir.",
     "Report": "Rapor", "Method": "Yöntem", "Pricing": "Fiyatlandırma", "Features": "Özellikler", "License": "Lisans", "Buy Pro": "Pro'yu Satın Al", "Support": "Destek", "Language": "Dil", "Reads": "Okuma", "Adapter": "Adaptör", "LOCAL": "YEREL", "No data upload": "Veri yükleme yok", "RNA-seq QC guide": "RNA-seq QC kılavuzu", "$19 USD": "$19 USD", "· one-time / up to 5 users": "· tek seferlik / 5 kullanıcıya kadar", "· One lab/team · Up to 5 users · All v1.x updates": "· Bir laboratuvar/ekip · 5 kullanıcıya kadar · Tüm v1.x güncellemeleri", "© 2026 GenomQC · A LyoVexa brand": "© 2026 GenomQC · Bir LyoVexa markası",
     "Main navigation": "Ana gezinme", "Product features": "Ürün özellikleri", "GenomQC home": "GenomQC ana sayfa",
     "Public beta · Runs in your browser": "Herkese açık beta · Tarayıcınızda çalışır", "From QC output": "QC çıktısından", "to a decision.": "karara.",

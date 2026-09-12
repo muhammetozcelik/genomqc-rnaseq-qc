@@ -2,6 +2,8 @@
   "use strict";
 
   const copy = (english, turkish) => root.GenomQCI18n && root.GenomQCI18n.getLanguage() === "tr" ? turkish : english;
+  const metricNames = Object.freeze(["reads", "q30", "gc", "duplication", "adapter", "retained"]);
+  const maxSamples = 500;
 
   const demoSamples = [
     { sample: "CTRL_01", reads: 24840000, q30: 91.7, gc: 48.2, duplication: 28.4, adapter: 1.2, retained: 96.8 },
@@ -82,7 +84,8 @@
       for (const [key, value] of Object.entries(flat)) {
         const cleanKey = normalizedKey(key);
         if (!alias.test(cleanKey)) continue;
-        const parsed = numeric(value);
+        const readValue = options && options.kind === "reads" && typeof value === "string" && /^\d{1,3}(,\d{3})+$/.test(value.trim()) ? value.replace(/,/g, "") : value;
+        const parsed = numeric(readValue);
         if (!parsed) continue;
         if (options && options.kind === "reads" && options.source === "multiqc-delimited" && /^(fastp|fastqc)_/.test(cleanKey)) {
           return { value: Math.round(parsed.value * 1000000), explicitPercent: false, key: cleanKey };
@@ -111,8 +114,38 @@
       adapter: percentage(metricValue(flat, metricAliases.adapter), options),
       retained: percentage(metricValue(flat, metricAliases.retained), options)
     };
-    const available = Object.entries(result).filter(([key, value]) => key !== "sample" && value !== undefined).length;
+    validateSample(result);
+    const available = metricNames.filter((key) => result[key] !== undefined).length;
     return available ? result : null;
+  }
+
+  function validateSample(sample) {
+    metricNames.forEach((key) => {
+      const value = sample[key];
+      if (value === undefined) return;
+      const invalid = !Number.isFinite(value) || value < 0 || (key === "reads" ? !Number.isSafeInteger(value) : value > 100);
+      if (invalid) throw new Error(copy(
+        `Invalid ${key} for ${sample.sample}: ${value}. Use non-negative whole read counts and percentages from 0 to 100.`,
+        `${sample.sample} için geçersiz ${key}: ${value}. Okuma sayısı negatif olmayan tam sayı, yüzdeler 0–100 arasında olmalıdır.`
+      ));
+    });
+  }
+
+  function validateSamples(samples) {
+    if (samples.length > maxSamples) throw new Error(copy(
+      `This file contains ${samples.length} samples; the limit is ${maxSamples}. Nothing was truncated. Split the export into intentional cohorts before importing.`,
+      `Dosyada ${samples.length} örnek var; sınır ${maxSamples}. Hiçbir örnek kesilmedi. İçe aktarmadan önce dışa aktarımı uygun kohortlara ayırın.`
+    ));
+    const seen = new Set();
+    samples.forEach((sample) => {
+      validateSample(sample);
+      const name = String(sample.sample || "").trim();
+      if (!name || seen.has(name)) throw new Error(copy(
+        `Sample IDs must be present and unique. Check sample: ${name || "(empty)"}.`,
+        `Örnek kimlikleri dolu ve benzersiz olmalıdır. Kontrol edin: ${name || "(boş)"}.`
+      ));
+      seen.add(name);
+    });
   }
 
   function recordsFromMultiQcJson(value) {
@@ -139,40 +172,38 @@
     const multiQcRecords = recordsFromMultiQcJson(value);
     if (multiQcRecords) return multiQcRecords;
     const candidates = [];
+    const collected = new WeakSet();
+    const collect = (record, hint) => {
+      if (collected.has(record)) return;
+      const normalized = normalizeRecord(record, hint);
+      if (normalized) { candidates.push(normalized); collected.add(record); }
+    };
     const visit = (node, depth) => {
       const level = depth || 0;
       if (!node || typeof node !== "object" || level > 7) return;
       if (Array.isArray(node)) {
         node.forEach((item) => {
           if (item && typeof item === "object" && !Array.isArray(item)) {
-            const normalized = normalizeRecord(item);
-            if (normalized) candidates.push(normalized);
+            collect(item);
           }
           visit(item, level + 1);
         });
         return;
       }
 
-      const direct = normalizeRecord(node);
-      if (direct) candidates.push(direct);
+      collect(node);
       const entries = Object.entries(node);
       const objectValues = entries.filter(([, child]) => child && typeof child === "object" && !Array.isArray(child));
       if (objectValues.length >= 2) {
         objectValues.forEach(([sample, child]) => {
-          const normalized = normalizeRecord(child, sample);
-          if (normalized) candidates.push(normalized);
+          collect(child, sample);
         });
       }
       entries.forEach(([, child]) => visit(child, level + 1));
     };
     visit(value, 0);
 
-    const unique = new Map();
-    candidates.forEach((item) => {
-      const key = `${item.sample}|${item.reads ?? ""}|${item.q30 ?? ""}|${item.gc ?? ""}|${item.duplication ?? ""}`;
-      if (!unique.has(key)) unique.set(key, item);
-    });
-    return Array.from(unique.values());
+    return candidates;
   }
 
   function splitRow(line, delimiter) {
@@ -196,6 +227,7 @@
       }
     }
     values.push(current.trim());
+    if (quoted) throw new Error(copy("An unclosed quoted field was found. Check the table export.", "Kapatılmamış tırnaklı alan bulundu. Tablo dışa aktarımını kontrol edin."));
     return values;
   }
 
@@ -204,11 +236,20 @@
     if (lines.length < 2) return [];
     const delimiter = lines[0].includes("\t") ? "\t" : lines[0].includes(";") ? ";" : ",";
     const headers = splitRow(lines[0], delimiter);
-    return lines.slice(1).map((line) => {
+    if (headers.some((header) => !header) || new Set(headers.map(normalizedKey)).size !== headers.length) {
+      throw new Error(copy("Column names must be non-empty and unique.", "Sütun adları dolu ve benzersiz olmalıdır."));
+    }
+    return lines.slice(1).map((line, index) => {
       const values = splitRow(line, delimiter);
+      if (values.length !== headers.length) throw new Error(copy(
+        `Row ${index + 2} has ${values.length} fields; expected ${headers.length}. Check delimiters and quoted values.`,
+        `${index + 2}. satırda ${values.length} alan var; ${headers.length} bekleniyor. Ayraçları ve tırnaklı değerleri kontrol edin.`
+      ));
       const record = Object.fromEntries(headers.map((header, index) => [header, values[index] || ""]));
-      return normalizeRecord(record, undefined, { source: "multiqc-delimited" });
-    }).filter(Boolean);
+      const sample = normalizeRecord(record, undefined, { source: "multiqc-delimited" });
+      if (!sample) throw new Error(copy(`Row ${index + 2} has no sample ID or recognized metrics.`, `${index + 2}. satırda örnek kimliği veya tanınan metrik yok.`));
+      return sample;
+    });
   }
 
   function parseQcFile(text, fileName) {
@@ -216,13 +257,15 @@
     if (!trimmed) throw new Error(copy("The file appears to be empty.", "Dosya boş görünüyor."));
     let samples;
     if (String(fileName || "").toLowerCase().endsWith(".json") || trimmed.startsWith("{") || trimmed.startsWith("[")) {
+      let value;
       try {
-        samples = recordsFromJson(JSON.parse(trimmed));
+        value = JSON.parse(trimmed);
       } catch (error) {
         throw new Error(copy("The JSON could not be read. Upload a valid MultiQC JSON export.", "JSON okunamadı. Geçerli bir MultiQC JSON dışa aktarımı yükleyin."));
       }
+      samples = recordsFromJson(value);
     } else {
-      samples = recordsFromDelimited(trimmed);
+      samples = recordsFromDelimited(String(text).replace(/^\uFEFF/, ""));
     }
     if (!samples.length) {
       throw new Error(copy("No sample had at least two recognized QC metrics. Use MultiQC 1.35 multiqc_data.json, multiqc_general_stats.txt, or a documented TSV/CSV table.", "Hiçbir numunede en az iki tanınan QC metriği yok. MultiQC 1.35 multiqc_data.json, multiqc_general_stats.txt veya belgelenmiş bir TSV/CSV tablosu kullanın."));
@@ -232,7 +275,8 @@
       const names = incomplete.slice(0, 5).map((sample) => sample.sample).join(", ");
       throw new Error(copy(`Decision stopped: fewer than two recognized metrics for ${names}. Missing values are not treated as zero.`, `Karar durduruldu: ${names} için ikiden az tanınan metrik var. Eksik değerler sıfır sayılmaz.`));
     }
-    return samples.slice(0, 500);
+    validateSamples(samples);
+    return samples;
   }
 
   function median(values) {
@@ -250,6 +294,7 @@
   }
 
   function evaluateSamples(samples, thresholdOverrides) {
+    validateSamples(samples);
     const thresholds = resolveThresholds(thresholdOverrides);
     const gcValues = samples.map((sample) => sample.gc).filter((value) => value !== undefined);
     const gcMedian = gcValues.length >= 3 ? median(gcValues) : undefined;
@@ -303,7 +348,15 @@
         status: severity === 2 ? "FAIL" : severity === 1 ? "WARN" : "PASS",
         findings,
         actions,
-        score: Math.max(0, 100 - penalties)
+        score: Math.max(0, 100 - penalties),
+        evidence: {
+          available: metricNames.filter((key) => sample[key] !== undefined),
+          missing: metricNames.filter((key) => sample[key] === undefined),
+          completeness: available === metricNames.length ? "COMPLETE" : "PARTIAL",
+          gcComparison: gcMedian === undefined ? "NOT_EVALUATED" : "EVALUATED",
+          gcReferenceMedian: gcMedian,
+          gcReferenceSampleCount: gcValues.length
+        }
       });
     });
   }
@@ -316,10 +369,13 @@
     const prioritized = samples.slice().sort((a, b) => rank[b.status] - rank[a.status]);
     const actions = Array.from(new Set(prioritized.flatMap((sample) => sample.actions))).slice(0, 4);
     const risks = Array.from(new Set(prioritized.filter((sample) => sample.status !== "PASS").flatMap((sample) => sample.findings))).slice(0, 4);
-    return { counts, overall, actions, risks };
+    return { counts, overall, actions, risks,
+      partialEvidenceCount: samples.filter((sample) => sample.evidence && sample.evidence.completeness === "PARTIAL").length,
+      gcComparisonAvailable: samples.some((sample) => sample.evidence && sample.evidence.gcComparison === "EVALUATED")
+    };
   }
 
-  const api = { version: "1.1.1-beta", demoSamples, defaultThresholds, resolveThresholds, parseQcFile, evaluateSamples, summarize };
+  const api = { version: "1.2.0-beta", metricNames, maxSamples, demoSamples, defaultThresholds, resolveThresholds, parseQcFile, evaluateSamples, summarize };
   root.GenomQCCore = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);

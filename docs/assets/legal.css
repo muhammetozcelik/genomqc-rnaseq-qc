@@ -1,2 +1,24 @@
-@import url('./legal-base.css?v=20260911-1');
-@import url('./brand-polish.css?v=20260911-1');
+:root { --ink:#081823; --paper:#f3efe5; --white:#fffdfa; --line:#c2bfb6; --blue:#1763e8; --orange:#f1633f; --font-body:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif; --font-display:"Segoe UI Variable Display","Segoe UI",Arial,sans-serif; }
+* { box-sizing:border-box; }
+body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--font-body); font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased; }
+a { color:var(--blue); }
+header { min-height:72px; padding:0 clamp(18px,5vw,72px); display:flex; align-items:center; justify-content:space-between; gap:24px; color:white; background:var(--ink); }
+header a.legal-brand { display:inline-flex; align-items:center; gap:12px; min-width:0; color:white; font-weight:600; letter-spacing:0; text-decoration:none; }
+header a img { width:40px; height:40px; object-fit:cover; border-radius:3px; }
+header .legal-wordmark { color:#fff; font-size:20px; font-weight:600; letter-spacing:-.01em; white-space:nowrap; }
+header .page-label { margin-left:auto; color:#b7c3c9; font-size:13px; font-weight:600; letter-spacing:.07em; white-space:nowrap; }
+main { width:min(900px,calc(100% - 36px)); margin:clamp(45px,8vw,95px) auto; padding:clamp(28px,5vw,64px); background:var(--white); border:1px solid var(--line); box-shadow:8px 8px 0 rgba(8,24,35,.11); }
+.kicker { color:var(--blue); font:700 13px/1.4 var(--font-body); letter-spacing:.06em; }
+h1 { margin:12px 0 10px; font:680 clamp(44px,7vw,72px)/1.03 var(--font-display); letter-spacing:-.032em; }
+.updated { margin-bottom:40px; color:#66757d; font-size:13px; }
+h2 { margin:36px 0 10px; padding-top:20px; border-top:1px solid var(--line); font-size:19px; }
+p,li { color:#3f515b; line-height:1.75; } li+li { margin-top:9px; }
+.notice { padding:18px 20px; background:#eef3ff; border-left:4px solid var(--blue); }
+footer { padding:34px clamp(18px,5vw,72px); display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; color:#aab8bf; background:var(--ink); font-size:13px; }
+footer div { display:flex; gap:18px; flex-wrap:wrap; } footer a { color:#d5dde1; }
+@media(max-width:560px) {
+  header { padding-inline:18px; gap:16px; }
+  header a img { width:38px; height:38px; }
+  header .legal-wordmark { font-size:18px; }
+  header .page-label { font-size:12px; letter-spacing:.04em; }
+}

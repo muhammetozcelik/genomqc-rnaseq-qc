@@ -26,7 +26,14 @@
     reviewQueue: document.getElementById("review-queue"),
     thresholds: document.getElementById("threshold-grid"),
     download: document.getElementById("download-json"),
-    print: document.getElementById("print-report")
+    print: document.getElementById("print-report"),
+    search: document.getElementById("sample-search"),
+    filter: document.getElementById("sample-filter"),
+    sampleCount: document.getElementById("sample-count"),
+    evidenceSummary: document.getElementById("evidence-summary"),
+    evidenceNote: document.getElementById("evidence-note"),
+    evidenceMetrics: document.getElementById("evidence-metrics"),
+    progress: document.getElementById("upload-progress")
   };
 
   let currentReport = null;
@@ -74,8 +81,29 @@
     return samples.length ? Math.round((available / (samples.length * metricNames.length)) * 100) : 0;
   }
 
+  function needsReview(sample) {
+    return sample.status !== "PASS" || sample.evidence.completeness === "PARTIAL";
+  }
+
+  function renderEvidence(summary, samples) {
+    elements.evidenceSummary.textContent = summary.partialEvidenceCount
+      ? copy(`Partial evidence · ${summary.partialEvidenceCount} of ${samples.length} samples`, `Kısmi kanıt · ${samples.length} örneğin ${summary.partialEvidenceCount} tanesi`)
+      : copy("Evidence coverage · all 6 supported metrics present", "Kanıt kapsamı · desteklenen 6 metriğin tamamı mevcut");
+    elements.evidenceNote.textContent = copy("Missing values are not zero and are not a passing result. ", "Eksik değerler sıfır veya başarılı sonuç sayılmaz. ") + (summary.gcComparisonAvailable
+      ? copy("GC comparisons use this cohort's median; interpret only among comparable libraries.", "GC karşılaştırması bu kohortun medyanını kullanır; yalnızca karşılaştırılabilir kütüphaneler arasında yorumlayın.")
+      : copy("GC comparison was not evaluated: at least 3 samples with GC are required.", "GC karşılaştırması yapılmadı: GC değeri olan en az 3 örnek gerekir."));
+    clear(elements.evidenceMetrics);
+    const labels = [copy("Reads", "Okuma"), "Q30", "GC", copy("Duplication", "Duplikasyon"), copy("Adapter", "Adaptör"), copy("Retention", "Tutulum")];
+    core.metricNames.forEach((key, index) => {
+      const count = samples.filter((sample) => sample[key] !== undefined).length;
+      const item = createElement("div", count < samples.length ? "is-partial" : "");
+      item.append(createElement("dt", "", labels[index]), createElement("dd", "", `${count} / ${samples.length}`));
+      elements.evidenceMetrics.appendChild(item);
+    });
+  }
+
   function renderGate(summary, evaluated) {
-    const queue = evaluated.filter((sample) => sample.status !== "PASS");
+    const queue = evaluated.filter(needsReview);
     const messages = {
       PASS: [copy("Clear at the active thresholds", "Etkin eşiklerde engel yok"), copy("No sample crosses a WARN or FAIL boundary. Confirm the result against the experimental design before downstream use.", "Hiçbir örnek WARN veya FAIL sınırını aşmıyor. Aşağı akış kullanımından önce sonucu deney tasarımıyla doğrulayın.")],
       WARN: [copy("Review before downstream analysis", "Aşağı akış analizinden önce inceleyin"), copy("At least one sample crosses a WARN boundary. Review the flagged evidence before accepting the cohort.", "En az bir örnek WARN sınırını aşıyor. Kohortu kabul etmeden önce işaretli kanıtları inceleyin.")],
@@ -84,13 +112,19 @@
     elements.gate.className = `decision-gate is-${summary.overall.toLowerCase()}`;
     elements.gateTitle.textContent = messages[summary.overall][0];
     elements.gateCopy.textContent = messages[summary.overall][1];
+    if (summary.overall === "PASS" && (summary.partialEvidenceCount || !summary.gcComparisonAvailable)) {
+      elements.gate.className = "decision-gate is-warn";
+      elements.gateTitle.textContent = copy("No threshold flags · evidence needs review", "Eşik uyarısı yok · kanıtlar incelenmeli");
+      elements.gateCopy.textContent = copy("Available values pass the active thresholds, but missing metrics or an unevaluated GC comparison limit this assessment.", "Mevcut değerler etkin eşikleri geçiyor; eksik metrikler veya yapılamayan GC karşılaştırması değerlendirmeyi sınırlıyor.");
+    }
     elements.coverage.textContent = `${metricCoverage(evaluated)}%`;
     elements.queueCount.textContent = String(queue.length);
   }
 
   function renderReviewQueue(evaluated) {
     clear(elements.reviewQueue);
-    const flagged = evaluated.filter((sample) => sample.status !== "PASS");
+    const rank = { FAIL: 2, WARN: 1, PASS: 0 };
+    const flagged = evaluated.filter(needsReview).sort((a, b) => rank[b.status] - rank[a.status]);
     if (!flagged.length) {
       elements.reviewQueue.appendChild(createElement("p", "review-empty", copy("No samples are in the review queue at the active thresholds.", "Etkin eşiklerde inceleme kuyruğunda örnek yok.")));
       return;
@@ -102,8 +136,12 @@
       const evidenceTitle = createElement("h5", "", copy("Evidence", "Kanıt"));
       const evidence = document.createElement("ul");
       sample.findings.forEach((finding) => evidence.appendChild(createElement("li", "", finding)));
+      if (sample.evidence.missing.length) evidence.appendChild(createElement("li", "evidence-missing", `${copy("Not supplied", "Sağlanmadı")}: ${sample.evidence.missing.join(", ")}.`));
       const action = createElement("p", "review-action");
-      action.append(createElement("strong", "", `${copy("Next action", "Sonraki eylem")}: `), document.createTextNode(sample.actions[0]));
+      const nextAction = sample.status === "PASS" && sample.evidence.missing.length
+        ? copy("Check the export for missing metrics and confirm whether they are required for your assay before accepting this sample.", "Örneği kabul etmeden önce dışa aktarımdaki eksik metrikleri kontrol edin ve deneyiniz için gerekli olup olmadıklarını doğrulayın.")
+        : sample.actions[0];
+      action.append(createElement("strong", "", `${copy("Next action", "Sonraki eylem")}: `), document.createTextNode(nextAction));
       card.append(head, evidenceTitle, evidence, action);
       elements.reviewQueue.appendChild(card);
     });
@@ -128,11 +166,12 @@
   }
 
   function renderReport(samples, sourceName) {
-    currentInput = { samples, sourceName };
+    const generatedAt = currentInput && currentInput.samples === samples && currentInput.sourceName === sourceName ? currentInput.generatedAt : new Date().toISOString();
+    currentInput = { samples, sourceName, generatedAt };
     const evaluated = core.evaluateSamples(samples);
     const summary = core.summarize(evaluated);
     currentReport = {
-      generatedAt: new Date().toISOString(),
+      generatedAt,
       source: sourceName,
       engineVersion: core.version,
       decisionProfile: {
@@ -146,7 +185,7 @@
 
     elements.source.textContent = `${copy("Source", "Kaynak")}: ${sourceName}`;
     elements.datasetKind.textContent = isDemoSource(sourceName) ? copy("ILLUSTRATIVE DATASET", "ÖRNEK VERİ SETİ") : copy("LOCAL FILE", "YEREL DOSYA");
-    elements.generated.textContent = `${copy("Generated", "Oluşturuldu")}: ${new Intl.DateTimeFormat(language() === "tr" ? "tr-TR" : "en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date())}`;
+    elements.generated.textContent = `${copy("Generated", "Oluşturuldu")}: ${new Intl.DateTimeFormat(language() === "tr" ? "tr-TR" : "en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(generatedAt))} · v${core.version}`;
     elements.overall.textContent = summary.overall;
     elements.overall.className = `status-badge status-${summary.overall.toLowerCase()}`;
 
@@ -162,14 +201,31 @@
       elements.metrics.appendChild(metric);
     });
 
-    renderList(elements.findings, summary.risks, copy("No notable cohort risk was detected at the defined thresholds.", "Tanımlı eşiklerde belirgin bir kohort riski saptanmadı."));
-    renderList(elements.actions, summary.actions, copy("Proceed to downstream analysis together with qualified review.", "Uzman incelemesiyle birlikte aşağı akış analizine geçin."));
+    const risks = [...summary.risks];
+    const actions = [...summary.actions];
+    if (summary.partialEvidenceCount) {
+      risks.unshift(copy("Some supported metrics were not supplied; the assessment is incomplete.", "Desteklenen bazı metrikler sağlanmadı; değerlendirme eksik kanıta dayanıyor."));
+      actions.unshift(copy("Check missing metrics in the source export and confirm assay-specific requirements before accepting the report.", "Raporu kabul etmeden önce kaynak dışa aktarımındaki eksik metrikleri ve deneye özgü gereksinimleri kontrol edin."));
+    }
+    renderList(elements.findings, risks, copy("No notable cohort risk was detected at the defined thresholds.", "Tanımlı eşiklerde belirgin bir kohort riski saptanmadı."));
+    renderList(elements.actions, actions, copy("Proceed to downstream analysis together with qualified review.", "Uzman incelemesiyle birlikte aşağı akış analizine geçin."));
     renderGate(summary, evaluated);
     renderReviewQueue(evaluated);
     renderThresholds();
+    renderEvidence(summary, evaluated);
+    renderTable();
+  }
 
+  function renderTable(showAll) {
     clear(elements.table);
-    evaluated.forEach((sample) => {
+    const query = elements.search.value.trim().toLocaleLowerCase();
+    const selected = elements.filter.value;
+    const samples = currentReport.samples.filter((sample) => showAll || (
+      sample.sample.toLocaleLowerCase().includes(query) &&
+      (selected === "all" || (selected === "review" ? needsReview(sample) : selected === "partial" ? sample.evidence.completeness === "PARTIAL" : sample.status === selected))
+    ));
+    elements.sampleCount.textContent = copy(`${samples.length} of ${currentReport.samples.length} samples · summary covers all samples`, `${currentReport.samples.length} örneğin ${samples.length} tanesi · özet tüm örnekleri kapsar`);
+    samples.forEach((sample) => {
       const row = document.createElement("tr");
       const nameCell = createElement("td", "", sample.sample);
       const statusCell = document.createElement("td");
@@ -180,12 +236,19 @@
         formatPercent(sample.gc),
         formatPercent(sample.duplication),
         formatPercent(sample.adapter),
+        `${sample.evidence.available.length} / 6${sample.evidence.completeness === "PARTIAL" ? copy(" · partial", " · kısmi") : ""}`,
         sample.findings[0]
       ];
       row.append(nameCell, statusCell);
       values.forEach((value, index) => row.appendChild(createElement("td", value === "—" ? "value-muted" : "", value)));
       elements.table.appendChild(row);
     });
+    if (!samples.length) {
+      const row = document.createElement("tr");
+      const cell = createElement("td", "empty-result", copy("No matching samples. Clear the search or change the filter.", "Eşleşen örnek yok. Aramayı temizleyin veya filtreyi değiştirin."));
+      cell.colSpan = 9;
+      row.appendChild(cell); elements.table.appendChild(row);
+    }
   }
 
   function showError(message) {
@@ -200,6 +263,8 @@
 
   function analyzeText(text, fileName) {
     const samples = core.parseQcFile(text, fileName);
+    elements.search.value = "";
+    elements.filter.value = "all";
     renderReport(samples, fileName || copy("Imported data", "İçe aktarılan veri"));
     return currentReport;
   }
@@ -211,12 +276,21 @@
       showError(copy("The file exceeds the 10 MB limit. Use a MultiQC general-stats export.", "Dosya 10 MB sınırını aşıyor. MultiQC general stats dışa aktarımını kullanın."));
       return;
     }
+    elements.chooseFile.disabled = true;
+    elements.loadDemo.disabled = true;
+    elements.progress.hidden = false;
+    elements.progress.textContent = copy("Reading and checking your file locally…", "Dosyanız yerel olarak okunuyor ve kontrol ediliyor…");
     try {
       const text = await file.text();
       analyzeText(text, file.name);
       document.getElementById("report").scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
-      showError(error instanceof Error ? error.message : copy("The file could not be analyzed.", "Dosya analiz edilemedi."));
+      showError((error instanceof Error ? error.message : copy("The file could not be analyzed.", "Dosya analiz edilemedi.")) + copy(" The previous report is unchanged.", " Önceki rapor değiştirilmedi."));
+    } finally {
+      elements.chooseFile.disabled = false;
+      elements.loadDemo.disabled = false;
+      elements.progress.hidden = true;
+      elements.fileInput.value = "";
     }
   }
 
@@ -237,11 +311,26 @@
   elements.fileInput.addEventListener("change", (event) => handleFile(event.target.files && event.target.files[0]));
   elements.loadDemo.addEventListener("click", () => {
     hideError();
+    elements.search.value = "";
+    elements.filter.value = "all";
     renderReport(core.demoSamples, copy("Illustrative bulk RNA-seq cohort · 5 samples", "Örnek bulk RNA-seq kohortu · 5 örnek"));
     document.getElementById("report").scrollIntoView({ behavior: "smooth", block: "start" });
   });
   elements.download.addEventListener("click", downloadReport);
   elements.print.addEventListener("click", () => window.print());
+  elements.search.addEventListener("input", () => renderTable());
+  elements.filter.addEventListener("change", () => renderTable());
+  let evidenceWasOpen = false;
+  window.addEventListener("beforeprint", () => {
+    const panel = document.getElementById("evidence-panel");
+    evidenceWasOpen = panel.open;
+    panel.open = true;
+    renderTable(true);
+  });
+  window.addEventListener("afterprint", () => {
+    document.getElementById("evidence-panel").open = evidenceWasOpen;
+    renderTable();
+  });
 
   ["dragenter", "dragover"].forEach((eventName) => {
     elements.dropZone.addEventListener(eventName, (event) => {
