@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Learn how to interpret a MultiQC RNA-seq report: review cohort context, per-sample metrics, missing data and reproducible PASS, WARN or FAIL actions." />
+    <meta name="theme-color" content="#081823" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="How to interpret a MultiQC RNA-seq report | GenomQC" />
+    <meta property="og:description" content="A practical path from aggregated QC metrics to reviewable RNA-seq decisions." />
+    <meta property="og:url" content="https://genomqc.pages.dev/how-to-interpret-multiqc-rnaseq" />
+    <title>How to interpret a MultiQC RNA-seq report | GenomQC</title>
+    <link rel="canonical" href="https://genomqc.pages.dev/how-to-interpret-multiqc-rnaseq" />
+    <link rel="icon" href="./assets/genomqc-logo.png" type="image/png" />
+    <link rel="stylesheet" href="./assets/legal.css?v=20260912" />
+  </head>
+  <body>
+    <header><a class="legal-brand" href="./" aria-label="GenomQC home"><img src="./assets/genomqc-logo.png" alt="" /> <span class="legal-wordmark">GenomQC</span></a><span class="page-label">GUIDE</span></header>
+    <main>
+      <p class="kicker">MULTIQC FOR RNA-SEQ</p>
+      <h1>How to interpret a MultiQC RNA-seq report</h1>
+      <p class="updated">Start with context, then turn findings into accountable actions</p>
+
+      <p class="notice">MultiQC aggregates results from FastQC, fastp, aligners and other tools. It makes a QC review easier to see; it does not decide whether a sample should proceed.</p>
+
+      <h2>Read the report as a cohort first</h2>
+      <p>Before focusing on a single sample, check how many samples are represented and whether they belong to the same protocol, lane, batch and experimental group. A value can be acceptable in one library type and problematic in another.</p>
+
+      <h2>Identify the metrics your run actually provides</h2>
+      <p>Use the general statistics table as an index, then inspect the source module for any concerning signal. Typical RNA-seq inputs include sequence quality, read count, adapter content, trimming retention, mapping or assignment rate, duplication and GC distribution. Not every report contains every metric.</p>
+
+      <h2>Interpret patterns, not isolated colours</h2>
+      <p>A FastQC warning is a prompt to investigate, not an automatic failure. For example, duplication and GC shifts need interpretation in the context of library complexity, transcript abundance and experimental design. Look for samples that differ materially from comparable samples in the same cohort.</p>
+
+      <h2>Make missing information explicit</h2>
+      <p>If an expected metric is absent, record that it was not evaluated. Do not convert absence into a passing result and do not claim compatibility with an export layout that has not been checked.</p>
+
+      <h2>End with a decision queue</h2>
+      <p>For every sample, capture a status, the metric that caused it, the rule or cohort comparison used, and a next action. Useful actions include proceed, inspect raw data, verify sample identity, repeat preprocessing or discuss exclusion with the study team.</p>
+
+      <h2>Use MultiQC with a transparent decision layer</h2>
+      <p><a href="./"><strong>Open GenomQC</strong></a> to create a local PASS, WARN and FAIL queue from a supported MultiQC export. It is designed to complement MultiQC and qualified review, not replace either.</p>
+      <p>For a repeatable workflow, use the <a href="./rna-seq-qc-checklist.html">RNA-seq QC checklist</a> and <a href="./rna-seq-qc-report-template.html">QC report template</a>.</p>
+
+      <h2>Scope</h2>
+      <p>GenomQC supports research-use QC prioritization. It does not make clinical, diagnostic or treatment decisions.</p>
+    </main>
+    <footer><span>© 2026 GenomQC · A LyoVexa brand</span><div><a href="./">Free beta</a><a href="./pro.html">Pro</a><a href="./privacy.html">Privacy</a><a href="mailto:genomqc@outlook.com">Support</a></div></footer>
+    <!-- Cloudflare Web Analytics --><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"35f7cd3b60834b8f97886a4f97018d94"}'></script><!-- End Cloudflare Web Analytics -->
+  </body>
+</html>

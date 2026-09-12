@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="A practical RNA-seq QC checklist for reviewing MultiQC outputs, assigning sample-level actions and recording a reproducible decision." />
+    <meta name="theme-color" content="#081823" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="RNA-seq QC checklist | GenomQC" />
+    <meta property="og:description" content="A practical checklist for turning RNA-seq QC metrics into documented sample-level actions." />
+    <meta property="og:url" content="https://genomqc.pages.dev/rna-seq-qc-checklist" />
+    <title>RNA-seq QC checklist: what to review before downstream analysis | GenomQC</title>
+    <link rel="canonical" href="https://genomqc.pages.dev/rna-seq-qc-checklist" />
+    <link rel="icon" href="./assets/genomqc-logo.png" type="image/png" />
+    <link rel="stylesheet" href="./assets/legal.css?v=20260912" />
+  </head>
+  <body>
+    <header><a class="legal-brand" href="./" aria-label="GenomQC home"><img src="./assets/genomqc-logo.png" alt="" /> <span class="legal-wordmark">GenomQC</span></a><span class="page-label">CHECKLIST</span></header>
+    <main>
+      <p class="kicker">PRACTICAL RNA-SEQ QC</p>
+      <h1>RNA-seq QC checklist: what to review before downstream analysis</h1>
+      <p class="updated">A sample-level review structure for research teams</p>
+
+      <p class="notice">Quality control is not a single score. A useful review combines experimental context, per-sample metrics and a recorded next action.</p>
+
+      <h2>1. Confirm the input and study context</h2>
+      <p>Keep the original MultiQC report, the structured export and the run metadata together. Verify sample identifiers, assay type, organism, library preparation, read layout and the laboratory SOP before interpreting a threshold.</p>
+
+      <h2>2. Review essential per-sample signals</h2>
+      <p>For each sample, inspect the metrics relevant to the workflow: read count, base quality or Q30, adapter content, retained reads after trimming, mapping or assignment rate where available, duplication and GC distribution. A metric that is missing should trigger review; it is not evidence of a pass.</p>
+
+      <h2>3. Compare samples with their cohort</h2>
+      <p>Outliers are often more informative than a universal cutoff. Compare distributions across the same run and ask whether an unusual value follows the study design, expected biology, a batch effect or a technical issue.</p>
+
+      <h2>4. Attach an action to every status</h2>
+      <p>Use a simple decision queue: <strong>PASS</strong> for samples ready to proceed, <strong>WARN</strong> for samples that need documented review, and <strong>FAIL</strong> for samples that should stop until the issue is resolved. Keep the metric, boundary, reason and next action together.</p>
+
+      <h2>5. Record the decision</h2>
+      <p>Export a concise human-readable report plus structured data. The record should state the tool versions, rule profile, available metrics, reviewer and any exception made for the project. This prevents QC decisions from living only in an analyst's memory.</p>
+
+      <h2>Common mistakes</h2>
+      <p>Do not treat all RNA-seq duplication as a failure, apply thresholds without considering library preparation, or collapse missing values into zeros. Do not let an automated label replace qualified scientific review.</p>
+
+      <h2>Turn the checklist into a review queue</h2>
+      <p><a href="./"><strong>Open the free GenomQC decision report</strong></a> to turn a supported MultiQC JSON, TSV or CSV export into an explainable sample-level queue. Files are processed locally in the browser.</p>
+      <p>Continue with <a href="./how-to-interpret-multiqc-rnaseq.html">how to interpret a MultiQC RNA-seq report</a> or use the <a href="./rna-seq-qc-report-template.html">RNA-seq QC report template</a>.</p>
+
+      <h2>Scope</h2>
+      <p>GenomQC supports research-use QC prioritization. It is not a clinical decision system and every result requires appropriately qualified review.</p>
+    </main>
+    <footer><span>© 2026 GenomQC · A LyoVexa brand</span><div><a href="./">Free beta</a><a href="./pro.html">Pro</a><a href="./privacy.html">Privacy</a><a href="mailto:genomqc@outlook.com">Support</a></div></footer>
+    <!-- Cloudflare Web Analytics --><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"35f7cd3b60834b8f97886a4f97018d94"}'></script><!-- End Cloudflare Web Analytics -->
+  </body>
+</html>

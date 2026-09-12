@@ -15,14 +15,16 @@
     <meta name="twitter:card" content="summary_large_image" />
     <title>GenomQC — RNA-seq QC Decision Report</title>
     <link rel="canonical" href="https://genomqc.pages.dev/" />
-    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./assets/app.css" />
+    <link rel="icon" href="./assets/genomqc-logo.png" type="image/png" />
+    <link rel="stylesheet" href="./assets/app.css?v=20260912" />
+    <link rel="stylesheet" href="./assets/refinement.css?v=20260912" />
   </head>
   <body>
+    <a class="skip-link" href="#report">Skip to report</a>
     <header class="site-header">
       <a class="brand" href="#top" aria-label="GenomQC home">
-        <span class="brand-mark" aria-hidden="true">GQ</span>
-        <span>GenomQC</span>
+        <span class="brand-logo-frame" aria-hidden="true"><img class="brand-logo" src="./assets/genomqc-logo.png" width="1254" height="1254" alt="" /></span>
+        <span class="brand-wordmark">GenomQC</span>
       </a>
       <nav aria-label="Main navigation">
         <a href="#report">Report</a>
@@ -50,7 +52,7 @@
         <section class="upload-card" aria-labelledby="upload-title">
           <div class="card-topline">
             <div>
-              <p class="card-kicker">01 · DATA INPUT</p>
+              <p class="card-kicker">01 · Data input</p>
               <h2 id="upload-title">Analyze your MultiQC export</h2>
             </div>
             <span class="local-pill">LOCAL</span>
@@ -69,14 +71,16 @@
             <button class="button button-ghost" id="load-demo" type="button">Load demo data</button>
           </div>
           <p class="privacy-note"><span aria-hidden="true">◈</span> Analysis happens entirely in this browser tab.</p>
+          <p class="input-help"><a href="./compatibility.html">Supported formats</a><span>Up to 500 samples · No silent truncation</span></p>
+          <p id="upload-progress" class="privacy-note" role="status" hidden></p>
           <p class="error-message" id="error-message" role="alert" hidden></p>
         </section>
       </section>
 
-      <section class="report-section" id="report" aria-labelledby="report-title">
+      <section class="report-section" id="report" aria-labelledby="report-title" tabindex="-1">
         <div class="section-heading report-heading">
           <div>
-            <p class="section-index">02 · DECISION REPORT</p>
+            <p class="section-index">02 · Decision report</p>
             <h2 id="report-title">Run decision summary</h2>
             <div class="report-provenance">
               <span class="demo-pill" id="dataset-kind">ILLUSTRATIVE DATASET</span>
@@ -110,6 +114,13 @@
           </div>
         </div>
 
+        <details class="evidence-panel" id="evidence-panel">
+          <summary id="evidence-summary">Evidence coverage</summary>
+          <p id="evidence-note"></p>
+          <dl id="evidence-metrics" class="evidence-metrics"></dl>
+          <p class="screening-note">PASS applies only to the available metrics at the active thresholds. It is not biological validation.</p>
+        </details>
+
         <div class="insight-grid">
           <article class="insight-card">
             <p class="card-kicker">KEY FINDINGS</p>
@@ -121,7 +132,12 @@
           </article>
         </div>
 
-        <div class="table-wrap">
+        <div class="sample-toolbar" role="search" aria-label="Filter samples">
+          <label for="sample-search">Find a sample<input id="sample-search" type="search" placeholder="Sample ID" autocomplete="off" /></label>
+          <label for="sample-filter">Show<select id="sample-filter"><option value="all">All samples</option><option value="review">Needs review</option><option value="FAIL">FAIL</option><option value="WARN">WARN</option><option value="PASS">PASS</option><option value="partial">Partial evidence</option></select></label>
+          <p id="sample-count" role="status" aria-live="polite"></p>
+        </div>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Sample results, scroll horizontally for all columns">
           <table>
             <caption class="visually-hidden">Sample-level quality-control results</caption>
             <thead>
@@ -133,6 +149,7 @@
                 <th scope="col">GC</th>
                 <th scope="col">Dup.</th>
                 <th scope="col">Adapter</th>
+                <th scope="col">Evidence</th>
                 <th scope="col">Primary reason</th>
               </tr>
             </thead>
@@ -173,7 +190,7 @@
       <section class="method-section" id="method" aria-labelledby="method-title">
         <div class="section-heading light-heading">
           <div>
-            <p class="section-index">03 · HOW IT WORKS</p>
+            <p class="section-index">03 · How it works</p>
             <h2 id="method-title">A defensible decision,<br />not another wall of plots.</h2>
           </div>
           <p>GenomQC combines common RNA-seq quality signals in one decision layer. Rules stay visible; the report supports prioritization and qualified review.</p>
@@ -213,7 +230,7 @@
 
       <section class="pilot-section" id="compatibility-check" aria-labelledby="pilot-title">
         <div class="pilot-copy">
-          <p class="section-index">04 · REAL-REPORT VALIDATION</p>
+          <p class="section-index">04 · Real-report validation</p>
           <h2 id="pilot-title">Join the<br />10-Report Challenge.</h2>
           <p>We are comparing GenomQC's review queue with qualified human review on 10 real, non-sensitive MultiQC exports. Participants receive a complimentary compatibility and QC-triage summary.</p>
         </div>
@@ -230,13 +247,13 @@
 
       <section class="pricing-section" id="pricing" aria-labelledby="pricing-title">
         <div class="pricing-intro">
-          <p class="section-index">05 · ACCESS</p>
+          <p class="section-index">05 · Access</p>
           <h2 id="pricing-title">Start with the free report.<br />Upgrade when your lab needs more.</h2>
           <p>The browser report is free. GenomQC Pro is a downloadable offline workspace with configurable thresholds, reusable profiles and branded decision reports.</p>
         </div>
         <div class="pricing-grid">
           <article class="price-card">
-            <p class="plan-name">PUBLIC BETA</p>
+            <p class="plan-name">Public beta</p>
             <p class="price"><strong>$0</strong></p>
             <ul>
               <li>Local analysis in your browser</li>
@@ -246,8 +263,8 @@
             <a class="button button-dark" href="#top">Try it now</a>
           </article>
           <article class="price-card featured-price">
-            <div class="soon-label">FOUNDER LAB PROGRAM</div>
-            <p class="plan-name">PRO · FOUNDER LAB LICENSE</p>
+            <div class="soon-label">Founder lab program</div>
+            <p class="plan-name">Pro · Founder lab license</p>
             <p class="price"><strong>$19 USD</strong><span> · one-time / up to 5 users</span></p>
             <ul>
               <li>Custom thresholds and reusable profiles</li>
@@ -293,9 +310,9 @@
       </div>
     </footer>
 
-    <script src="./assets/i18n.js?v=20260907-1" defer></script>
-    <script src="./assets/qc-core.js?v=20260907-1" defer></script>
-    <script src="./assets/app.js?v=20260906-6" defer></script>
+    <script src="./assets/i18n.js?v=20260911-1" defer></script>
+    <script src="./assets/qc-core.js?v=20260911-1" defer></script>
+    <script src="./assets/app.js?v=20260911-1" defer></script>
     <!-- Cloudflare Web Analytics --><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"35f7cd3b60834b8f97886a4f97018d94"}'></script><!-- End Cloudflare Web Analytics -->
   </body>
 </html>

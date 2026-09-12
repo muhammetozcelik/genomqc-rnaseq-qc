@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="A practical RNA-seq QC report template for documenting source files, sample-level findings, decision rules and next actions." />
+    <meta name="theme-color" content="#081823" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="RNA-seq QC report template | GenomQC" />
+    <meta property="og:description" content="A clear structure for making RNA-seq quality-control decisions reviewable and reproducible." />
+    <meta property="og:url" content="https://genomqc.pages.dev/rna-seq-qc-report-template" />
+    <title>RNA-seq QC report template: a reproducible review structure | GenomQC</title>
+    <link rel="canonical" href="https://genomqc.pages.dev/rna-seq-qc-report-template" />
+    <link rel="icon" href="./assets/genomqc-logo.png" type="image/png" />
+    <link rel="stylesheet" href="./assets/legal.css?v=20260912" />
+  </head>
+  <body>
+    <header><a class="legal-brand" href="./" aria-label="GenomQC home"><img src="./assets/genomqc-logo.png" alt="" /> <span class="legal-wordmark">GenomQC</span></a><span class="page-label">TEMPLATE</span></header>
+    <main>
+      <p class="kicker">REPRODUCIBLE RNA-SEQ QC</p>
+      <h1>RNA-seq QC report template</h1>
+      <p class="updated">A concise structure for QC handoff, review and auditability</p>
+
+      <p class="notice">A report is useful when another qualified reviewer can understand what was checked, why a sample was flagged and what should happen next.</p>
+
+      <h2>1. Run context</h2>
+      <p>Record the project or run identifier, assay, organism, library preparation, read layout, sequencing platform, date and reviewer. State which files and MultiQC version were used.</p>
+
+      <h2>2. QC source and rule profile</h2>
+      <p>Link the original MultiQC report and structured export. List the metrics available and the profile used for PASS, WARN and FAIL decisions. Thresholds should be described as protocol-specific starting points, not universal scientific standards.</p>
+
+      <h2>3. Sample-level decision table</h2>
+      <p>For each sample, include: sample identifier; status; relevant observed metric; comparison or boundary; concise reason; and next action. Keep the table short enough to use during a project review meeting.</p>
+
+      <h2>4. Cohort observations</h2>
+      <p>Summarize shared patterns such as a lane-level change, broad GC shift, consistent trimming loss or a group of samples with lower depth. Separate observations from conclusions that require experimental context.</p>
+
+      <h2>5. Decisions and exceptions</h2>
+      <p>State which samples can proceed, which require a follow-up check and which should pause. If a reviewer accepts an exception, document the reason, decision-maker and any downstream limitation.</p>
+
+      <h2>6. Export and sign-off</h2>
+      <p>Save both a human-readable PDF and a structured export alongside the original QC artifacts. Record the tool version and date so the decision can be repeated later.</p>
+
+      <h2>Generate a starting report locally</h2>
+      <p><a href="./"><strong>Use the free GenomQC browser report</strong></a> to create a structured review queue from supported MultiQC exports. Processing is local to the browser; the selected QC file is not uploaded to a GenomQC server.</p>
+      <p>Read the <a href="./rna-seq-qc-checklist.html">RNA-seq QC checklist</a> or learn <a href="./how-to-interpret-multiqc-rnaseq.html">how to interpret MultiQC for RNA-seq</a>.</p>
+
+      <h2>Scope</h2>
+      <p>GenomQC is a research-use QC prioritization tool. It does not replace protocol knowledge, laboratory SOPs or qualified scientific review.</p>
+    </main>
+    <footer><span>© 2026 GenomQC · A LyoVexa brand</span><div><a href="./">Free beta</a><a href="./pro.html">Pro</a><a href="./privacy.html">Privacy</a><a href="mailto:genomqc@outlook.com">Support</a></div></footer>
+    <!-- Cloudflare Web Analytics --><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"35f7cd3b60834b8f97886a4f97018d94"}'></script><!-- End Cloudflare Web Analytics -->
+  </body>
+</html>
